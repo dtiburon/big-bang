@@ -68,7 +68,6 @@ footer {
 /*      Forms      */
 /*-----------------*/
 .help-block {
-	margin-bottom: 15px !important;
 	margin-top: -10px;
 	color: #777;
 	font-size: 12px;
@@ -119,11 +118,11 @@ footer {
 
 /* .feed-form {} */
 
-.all-feeds{
+#all-feeds{
 	overflow: auto;
 }
 
-.all-feeds div:nth-child(odd) {
+#all-feeds div:nth-child(odd) {
      background: #CCFFCC;
 }
 
@@ -147,6 +146,11 @@ footer {
 	background-color: transparent;
 }
 
+.template-single-feed {
+	display: none;
+	visibility: hidden;
+
+}
 /*-------------------*/
 /* Responsive Layout */
 /*-------------------*/
