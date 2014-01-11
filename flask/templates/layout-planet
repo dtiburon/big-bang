@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!-- wrapper layout for planet feed & planet admin pages -->
+{% include "html-header" %}
+
+<body>
+  {% include "navbar" %}
+    <div class="container-fluid" id="main">
+        <div class="row-fluid" id="header-wrapper"><!-- Header Row -->
+
+<!-- Logo & Page Title -->
+
+            <div class="span2">
+                <div id="header-image" class="hidden-phone">
+                    <img src="/static/img/planeteria_200.png" width="150px">
+                </div>
+            </div>
+            <div class="span10">
+                <h1 id="page-title">Women in Free Software</h1><!-- todo: generate title dynamically (planet name) -->
+                <h5 id="header-slogan">Planeteria: Blog aggregation by your community, for your community.</h5>
+            </div>
+        </div>
+        <div class="row-fluid"><!-- Main Content Row -->
+{% block body %}{% endblock %}
+        </div><!-- / Main Content Row -->
+      <hr>
+
+      <footer>
+        <p>The code for Planeteria is licensed under the terms of the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">AGPLv3</a>.</p>
+        <p>Individual posts are copyright by their authors and Planeteria claims no exclusive rights to them. Click through the posts to the parent blogs and you should be able to find terms for reproduction.</p>
+        <p><a href="tos.html">Terms of Service</a>
+      </footer>
+  </div> <!-- /container -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min-2.2.2.js"></script>
+</body>
+</html>
+            </div><!-- / .span3 -->
+        </div><!-- / .row-fluid -->
+    </div><!-- / container-fluid -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min-2.2.2.js"></script>
+</body>
+</html> 

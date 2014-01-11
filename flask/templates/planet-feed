@@ -1,0 +1,127 @@
+{% extends 'layout-planet' %}
+{% block body %}
+<!-- END HEADER TEMPLATE, START BODY -->
+            <div class="span9"><!-- Body Text -->
+                <div id="feed">
+                    <div class="entry">
+                        <div class="entrytitle box"><a href="http://blog.gingertech.net/">Silvia Pfeiffer</a> &mdash; <a href="http://blog.gingertech.net/2013/03/09/new-challenges/">New Challenges</a>
+                        </div>
+                        <img src="/static/img/silvia.jpg" class="author-image img-rounded">
+                        <div class="entrycontent">
+                            <p>I finished up at Google last week and am now working at <a href="http://www.nicta.com.au/">NICTA</a>, an Australian ICT research institute.</p><p>My work with Google was exciting and I learned a lot. I like to think that Google also got a lot out of me &#8211; I coded and contributed to some YouTube caption features, I worked on Chrome captions and video controls, and above all I worked on video accessibility for HTML at the W3C.</p><p>I was one of the key authors of the <a href="http://www.w3.org/TR/media-accessibility-reqs/">W3C Media Accessibility Requirements document</a> that we created in the Media Accessibility Task Force of the W3C HTML WG. I then went on to help make video accessibility a reality. We created <a href="http://dev.w3.org/html5/webvtt/">WebVTT</a> and the <a href="http://www.w3.org/TR/html51/embedded-content-0.html#the-track-element">&lt;track&gt; element</a> and applied it to captions, subtitles, chapters (navigation), video descriptions, and metadata. To satisfy the need for synchronisation of video with other media resources such as sign language video or audio descriptions, we got the <a href="http://www.w3.org/TR/html51/embedded-content-0.html#media-controllers">MediaController</a> object and the <a href="http://www.w3.org/TR/html51/embedded-content-0.html#attr-media-mediagroup">@mediagroup</a> attribute.</p><p>I must say it was a most rewarding time. I learned a lot about being productive at Google, collaborate successfully over the distance, about how the WebKit community works, and about the new way of writing W3C standard (which is more like pseudo-code). As one consequence, I am now a co-editor of the W3C HTML spec and it seems I am also about to become <a href="http://lists.w3.org/Archives/Public/public-texttracks/2013Feb/0007.html">the editor of the WebVTT spec</a>.</p><p>At NICTA my new focus of work is <a href="http://www.webrtc.org/">WebRTC</a>. There is both a bit of research and a whole bunch of application development involved. I may even get to do some WebKit development, if we identify any issues with the current implementation. I started a week ago and am already amazed by the amount of work going on in the WebRTC space and the amazing number of open source projects playing around with it. Video conferencing is a new challenge and I look forward to it.</p>
+                        </div>
+                        <div class="entryfooter">
+                            <p>2013-03-09 10:16:26</p>
+                            <p>Tags for this feed: Tag1, Tag2, Tag3, Tag4</p>
+                        </div>
+                    </div>
+                    <div class="entry">
+                        <div class="entrytitle box"><a href="http://blog.lydiapintscher.de/">Lydia Pintscher</a> &mdash; <a href="http://blog.lydiapintscher.de/2013/03/10/akademy-2013-submit-your-talk-proposals-and-requests-for-financial-assistance/">Akademy 2013: submit your talk proposals and requests for financial assistance</a></div>
+                        <div class="entrycontent">
+                            <p><a href="http://akademy.kde.org">Akademy</a> is getting closer and it is time to submit proposals for talks. This is your chance to present your work and ideas to the KDE community in person. The call for papers is <a href="http://akademy2013.kde.org/cfp">here</a>. It has all the details.&#160;I&#8217;m sure there&#8217;s something interesting you could talk about in Bilbao. Don&#8217;t wait! If you have questions or are unsure I&#8217;m happy to help. Just send me an email.</p>
+                            <p><span style="text-decoration: underline;">Important</span>: deadline for submissions is <strong>March 15th, 23:59:59 CEST</strong>. But please do your program committee a favor and don&#8217;t wait until the last minute <img alt=";-)" class="wp-smiley" src="http://blog.lydiapintscher.de/wp-includes/img/smilies/icon_wink.gif"/></p>
+                            <p>&#160;</p>
+                            <p><a href="http://ev.kde.org">KDE e.V.</a> will once again provide travel and accommodation support to a number of people who need it to be able to attend Akademy. For details about this please see the <a href="http://ev.kde.org/rules/reimbursement_policy.php">reimbursement policy</a>. The board will approve requests in 3 rounds. The budget is limited. You want to be in the first round! The deadlines for requests are:</p>
+                            <ul><li>first round: March 15</li>
+                            <li>second round: April 15</li>
+                            <li>third round: May 15</li>
+                            </ul><p>To post a request please register for Akademy on <a href="http://akademy.kde.org">akademy.kde.org</a>. During the registration process you&#8217;ll be able to indicate it.</p>
+                        </div>
+                        <div class="entryfooter">
+                            <p>2013-03-09 22:55:36</p>
+                            <p>Tags for this feed: Tag1, Tag2, Tag3, Tag4</p>
+                        </div>
+                    </div><!-- / .entry -->
+                </div><!-- / #feed -->
+            </div><!-- / .span9 (left column)-->
+<!-- START SIDEBAR -->
+             <div class="span3"> <!-- right column -->
+                <div class="sidebar box">
+                    <h4>About this Planet</h4>
+                    The Women in Free Software planet includes a wide range of blogs from Free Software community members who identify as female, regardless of gender presentation or assigned sex at birth. Genderqueer and genderfluid people are welcome.
+                    <h4>Planet Contact</h4>
+                    To give feedback or request a change, email <a href="mailto:aleta.dunne@gmail.com">Aleta Dunne</a>. Aleta also can often be found on the #opw IRC channel on irc.gnome.org with the username <strong>aleta</strong></a>.
+                    <h5><a href="http://planeteria.org/wfs/admin.py">Admin Interface</a></h5>
+                </div>
+                <div class="sidebar box">
+                    <h4>Copyright</h4>
+                    <p>Posts are copyright their respective authors. Click through to see each site's terms for redistribution.</p>
+                </div>
+                <div class="sidebar box">
+                    <h4>Read a Tag</h4>
+                    Click on a tag to view just the feeds with that tag.
+                    <p>tag1 tag2 tag3 tag4 tag5 tag6</p>
+
+                    <h4>Subscribe to this Planet</h4>
+                    <ul class="unstyled">
+                        <li> <a href="http://planeteria.org/wfs/atom.xml" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"> All feeds (Atom)</a></li>
+                        <li> <a href="http://planeteria.org/wfs/opml.xml" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"> All feeds (OPML)</a></li>
+                    </ul>
+
+                    <h4>Feeds in this Planet</h4><!-- todo: generate list of feeds dynamically -->
+                    <ul class="unstyled">
+                        <li><a href="http://terrrydactyl.wordpress.com/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://terrrydactyl.wordpress.com">Teresa Cho</a></li>
+                        <li><a href="http://marijaradevska.wordpress.com/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://marijaradevska.wordpress.com">Marija Radevska</a></li>
+                        <li><a href="http://feeds.feedburner.com/infotropism" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://infotrope.net">Skud</a></li>
+                        <li><a href="http://valmj.wordpress.com/category/internship/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://valmj.wordpress.com">Valerie Juarez</a></li>
+                        <li><a href="http://feeds.feedburner.com/geekfeminismblog" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://geekfeminism.org">Geek Feminism</a></li>
+                        <li><a href="http://groups.drupal.org/node/9564/feed" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://groups.drupal.org/not_used/9564">Women in Drupal</a></li>
+                        <li><a href="http://feeds.feedburner.com/rocktreesky" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://www.rocktreesky.com/">Addison Berry</a></li>
+                        <li><a href="http://mitevam.tumblr.com/rss" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://mitevam.tumblr.com/">Mariya Nedelcheva Miteva</a></li>
+                        <li><a href="http://blogs.gnome.org/danni/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="https://blogs.gnome.org/danni">Danielle Madeley</a></li>
+                        <li><a href="http://jennyryan.net/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://jennyryan.net">Jenny Ryan</a></li>
+                        <li><a href="http://blog.matildabernard.in/feeds/posts/default/-/Tech" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://blog.matildabernard.in/search/label/Tech">Matilda Bernard</a></li>
+                        <li><a href="http://blog.lizardwrangler.com/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="https://blog.lizardwrangler.com">Mitchell Baker</a></li>
+                        <li><a href="http://nchelimo.blogspot.com/feeds/posts/default" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://nchelimo.blogspot.com/">Martha Chumo</a></li>
+                        <li><a href="http://starburst.hackerfriendly.com/?feed=rss2" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://starburst.hackerfriendly.com">Star Simpson</a></li>
+                        <li><a href="http://camilasan.wordpress.com/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://camilasan.wordpress.com">Camila Ayres</a></li>
+                        <li><a href="http://blogs.fsfe.org/myriam/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://blogs.fsfe.org/myriam">Myriam Schweingruber</a></li>
+                        <li><a href="http://chocolateandvodka.com/category/tech/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://chocolateandvodka.com">Suw Charman-Anderson</a></li>
+                        <li><a href="http://adainitiative.org/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://adainitiative.org">The Ada Initiative</a></li>
+                        <li><a href="http://housewifehacker.com/rss/index.rss" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://housewifehacker.com">Jessica Anderson</a></li>
+                        <li><a href="http://www.harihareswara.net/rss.xml" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://www.brainwane.net/ces.shtml">Sumana Harihareswara</a></li>
+                        <li><a href="http://svaksha.com/feed/rss2" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://svaksha.com/">Svaksha</a></li>
+                        <li><a href="http://blog.leahculver.com/atom.xml" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://blog.leahculver.com/">Leah Culver</a></li>
+                        <li><a href="http://sindhus.bitbucket.org/Internship.atom.xml" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://sindhus.bitbucket.org/">Sindhu S</a></li>
+                        <li><a href="http://feeds.feedburner.com/stormy" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://stormyscorner.com">Stormy Peters</a></li>
+                        <li><a href="http://blog.gingertech.net/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://blog.gingertech.net">Silvia Pfeiffer</a></li>
+                        <li><a href="https://opwsmanuel.wordpress.com/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://opwsmanuel.wordpress.com">Stephanie Manuel</a></li>
+                        <li><a href="http://liannelee.me/feeds/opw.rss" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://liannelee.me/">Lianne Lee</a></li>
+                        <li><a href="http://emmajane.net/tech/rss.xml" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://emmajane.net/tech/rss.xml">Emma Jane Hogbin</a></li>
+                        <li><a href="http://planningadinner.blogspot.com/feeds/posts/default" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://planningadinner.blogspot.com/">Marta Maria Casetti</a></li>
+                        <li><a href="http://helen-mccall.blogspot.com/feeds/posts/default" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://helen-mccall.blogspot.com/">Helen McCall</a></li>
+                        <li><a href="http://blog.zaori.org/?feed=rss2" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://blog.zaori.org">Kim Schoonover</a></li>
+                        <li><a href="http://annaraven.blogspot.com/feeds/posts/default" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://annaraven.blogspot.com/">Anna Martelli Ravenscroft</a></li>
+                        <li><a href="http://blog.lydiapintscher.de/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://blog.lydiapintscher.de">Lydia Pintscher</a></li>
+                        <li><a href="http://blog.spang.cc/index.rss" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://blog.spang.cc/">Christine Spang</a></li>
+                        <li><a href="http://www.stephalarcon.org/tag/fossopw/feed" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://www.stephalarcon.org">Stephanie Alarcon</a></li>
+                        <li><a href="http://fordmeg.blogspot.com/feeds/posts/default" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://fordmeg.blogspot.com/">Meg Ford</a></li>
+                        <li><a href="http://feeds.feedburner.com/interprete" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://gabriellacoleman.org/blog">Biella Coleman</a></li>
+                        <li><a href="http://feeds.feedburner.com/FreebsdFoundation" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://freebsdfoundation.blogspot.com/">Dru Lavigne</a></li>
+                        <li><a href="http://mikipedian.blogspot.com/feeds/posts/default?alt=rss" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://mikipedian.blogspot.com/">Sucheta Ghoshal</a></li>
+                        <li><a href="http://openthedesign.posterous.com/rss.xml" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://openthedesign.posterous.com">Aakanksha Gaur</a></li>
+                        <li><a href="http://blogs.sun.com/sherrym/feed/entries/rss" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="https://blogs.oracle.com/sherrym/">Sherry Q. Moore</a></li>
+                        <li><a href="http://blog.valerieaurora.org/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://blog.valerieaurora.org">Valerie Aurora</a></li>
+                        <li><a href="http://dtiburon.wordpress.com/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://dtiburon.wordpress.com">Aleta Dunne</a></li>
+                        <li><a href="http://hypatia.ca/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://hypatia.ca">Leigh Honeywell</a></li>
+                        <li><a href="http://priyankaivy.blogspot.com/feeds/posts/default" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://priyankaivy.blogspot.com/">Priyanka Nag</a></li>
+                        <li><a href="http://vmartinezdelacruz.com/category/OPW/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://vmartinezdelacruz.com">Victoria Martinez de la Cruz</a></li>
+                        <li><a href="http://deindre.wordpress.com/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://deindre.wordpress.com">Flavia Weisghizzi</a></li>
+                        <li><a href="http://g33kgrrl.wordpress.com/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://g33kgrrl.wordpress.com">Lisa J. Lovchik</a></li>
+                        <li><a href="http://feeds.feedburner.com/OpenSourceCulture" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://fastwonderblog.com">Dawn Foster</a></li>
+                        <li><a href="http://anteaya.info/atom.xml" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://anteaya.info/">Anita Kuno</a></li>
+                        <li><a href="http://techchicblog.wordpress.com/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://techchicblog.wordpress.com">Satabdi Das</a></li>
+                        <li><a href="http://ladquin.dreamwidth.org/data/rss" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://ladquin.dreamwidth.org/">Laura Alves</a></li>
+                        <li><a href="http://fossygirl.blogspot.com/feeds/posts/default" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://fossygirl.blogspot.com/">Fossy Girl</a></li>
+                        <li><a href="http://petramoessner.blogspot.com/feeds/posts/default" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://petramoessner.blogspot.com/">Petra Moessner</a></li>
+                        <li><a href="http://blogs.gnome.org/marina/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="https://blogs.gnome.org/marina">Marina Zhurakhinskaya</a></li>
+                        <li><a href="http://cc.com.au/blogs/donna/feed" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://cc.com.au/blogs/donna">Donna Benjamin</a></li>
+                        <li><a href="http://blog.melchua.com/category/teachingopensource/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://blog.melchua.com">Mel Chua</a></li>
+                        <li><a href="http://feeds.feedburner.com/audreyr" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://audreyr.posterous.com">Audrey M. Roy</a></li>
+                        <li><a href="http://blogs.fsfe.org/myriam/?feed=rss2" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://blogs.fsfe.org/myriam">Myriam Schweingruber</a></li>
+                        <li><a href="http://gabriela-gibson.blogspot.com/feeds/posts/default?alt=rss" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://gabriela-gibson.blogspot.com/">Gabriela Gibson</a></li>
+                        <li><a href="http://maletsabisam.wordpress.com/category/gnome-opw/feed/" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="http://maletsabisam.wordpress.com">Maletsabisa Molapo</a></li>
+                    </ul>
+                </div><!-- / #planet-subscriptions -->
+            </div><!-- /.span3 (right column) -->
+{% endblock %}
