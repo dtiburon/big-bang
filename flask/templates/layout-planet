@@ -30,14 +30,7 @@
         <p><a href="tos.html">Terms of Service</a>
       </footer>
   </div> <!-- /container -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!-- jQuery is loaded in the block body, just below DOM -->
     <script type="text/javascript" src="/static/js/bootstrap.min-2.2.2.js"></script>
 </body>
 </html>
-            </div><!-- / .span3 -->
-        </div><!-- / .row-fluid -->
-    </div><!-- / container-fluid -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/static/js/bootstrap.min-2.2.2.js"></script>
-</body>
-</html> 
