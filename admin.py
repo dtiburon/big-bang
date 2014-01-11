@@ -116,14 +116,14 @@ def template_vars(planet, config):
 
 ############################
  ##
-##  Config.ini Stuff
+##  Planet Changes
  ##
 ############################
 
 # Helper function to prevent duplicate key values for new feeds.
 def good_field(x):
-   """Forms sometimes have duplicate fields; when they do, it turns into an array.
-   Error cases always had a blank string and a real string. 
+   """Forms sometimes have duplicate fields; when they do, it turns into an array and
+   causes an error. Error cases always had a blank string and a real string. 
    This function returns the real string. """
    if isinstance(x,str): 
       return x
@@ -132,10 +132,10 @@ def good_field(x):
          if len(value) > 1:
             return value
 
-# Main function for config.ini
 def update_config(planet):
-   """Grab new values from the form and stick them in config.
-   Modifies config in place.  Does not save to file."""
+   """Grabs new values from the form to be saved to the planet.  Planet data was previously
+    stored in config; references to config mean the place where the planet data is stored.
+    Todo: rename functions, methods, etc. that reference config."""
    for k,v in {'PlanetName':'name', 'OwnerName':'user', 'OwnerEmail':'email',
                'Pass':'password', 'Sidebar':'sidebar'}.items():
       planet.__dict__[v] = Form.getvalue(k,'')
