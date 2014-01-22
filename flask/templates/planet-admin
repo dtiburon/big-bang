@@ -5,15 +5,15 @@
                 <a class="btn btn-small btn-success" id="feedbtn-add" onclick='add_feed()'><i class="icon-plus icon-white"></i> Add</a> and <a class="btn btn-small btn-danger" href="#"><i class="icon-white icon-remove"></i> Remove</a> feeds as needed.</p>
                 <form class="feed-form">
                     <div class="form-inline">
-                        When finished making changes, be sure to save them: <input type="password" class="input-small" placeholder="Password"> <a class="btn btn-success submit-button" onclick="save()">Save</a>
+                        When finished making changes, be sure to save them: <input type="password" class="input-small" placeholder="Password"> <a class="btn btn-success submit-button" onclick="save()" title="Save all changes">Save</a>
                     </div> <!-- / .form-inline -->
 
-                    <div style="display: none" id="template-feed-form"><!-- template for form that adds a single feed -->
-                        <div class="single-feed box">
+                    <div style="display: none" id="template-feed-form"><!-- template for form box that adds a single feed -->
+                        <div class="single-feed box" id="feed">
                             <div class="image-holder">
                                 <img src="http://i.imgur.com/xXWG7.jpg" class="img-rounded">
                             </div>
-                            <a class="btn btn-mini btn-danger feedbtn-rm" href="#"><i class="icon-white icon-remove"></i></a>
+                            <a class="btn btn-mini btn-danger feedbtn-rm" id="rm" title="Remove this feed"><i class="icon-white icon-remove"></i></a>
                             <fieldset>
                                 <label>Feed Name</label>
                                 <input type="text" id="feed-name" name="feed-name" placeholder="Blog author or title" required>
@@ -65,17 +65,20 @@
 <!--<script type="text/javascript" src="/static/js/jquery.validate.1.11.1.min.js"></script>-->
 <script type="text/javascript">
 var num_feeds = 0
+var highest_feed_id = 20 // store this in DB to pull as needed; generate new #s when saving new feeds
 
 $(document).ready(function() 
 {
+    $( ".feedbtn-rm" ).click(del_feed);
     add_feed();
 });
 
 function add_feed()
 {
-    // clone the hidden template
+    // clone the hidden template and make it visible
     $("#template-feed-form").children().clone(true).prependTo("#all-feeds");
     // add unique feed ID # to each field's id & name: feed-name, feed-url, feed-img
+    $("#all-feeds #feed").attr("id", "feed-" + num_feeds);
     $("#all-feeds #feed-name").attr("id", "feed-name-" + num_feeds);
     $("#all-feeds #feed-name").attr("name", "feed-name-" + num_feeds);
     $("#all-feeds #feed-url").attr("id", "feed-url-" + num_feeds);
@@ -85,13 +88,22 @@ function add_feed()
     num_feeds++;
 }
 
+function del_feed()
+{
+    deleted = {} // todo: store deleted feed info to later delete from planet database
+    $(this).parent().remove()
+}
+
 function save()
 {
-    // add form validation
-  //  new_feed = {};
+    // todo: add form validation
+    feed = {};  // builds dictionary (hash) with data from a single feed
     new_feed['url'] = $("#feed-url").val();
     new_feed['name'] = $("#feed-name").val();
     new_feed['image'] = $("#feed-image").val();
+
+    // add each new feed to the list of feeds
+    //  new_feeds = {};
 }
 </script>
 {% endblock %}
