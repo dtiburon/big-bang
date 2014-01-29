@@ -71,6 +71,7 @@ $(document).ready(function()
 {
     $( ".feedbtn-rm" ).click(del_feed);
     add_feed();
+    console.log("Ready!");
 });
 
 function add_feed()
@@ -90,18 +91,28 @@ function add_feed()
 
 function del_feed()
 {
-    deleted = {} // todo: store deleted feed info to later delete from planet database
-    $(this).parent().remove()
+    // todo: store deleted feed info to later delete from planet database
+    $(this).parent().remove();
 }
 
 function save()
 {
     // todo: add form validation
-    feed = {};  // builds dictionary (hash) with data from a single feed
-    new_feed['url'] = $("#feed-url").val();
-    new_feed['name'] = $("#feed-name").val();
-    new_feed['image'] = $("#feed-image").val();
-
+    // todo: confirm password
+    
+    console.log("Saving feeds...");
+    $("#all-feeds").children().each(function(index) {
+//        console.log("Feed index:" + index);
+        var feed_id = $(this).attr('id')
+        console.log("Feed ID:" + feed_id);
+        var id = feed_id.replace(/[^0-9]/g, ''); // strip non-numeric characters from feed ID to get the #
+        console.log("number:" + id);
+        feed = {};  // builds dictionary (hash) with data from a single feed
+        feed['url'] = $("#feed-url-" + id).val();
+        feed['name'] = $("#feed-name-" + id).val();
+        feed['image'] = $("#feed-img-" + id).val();
+        console.log(feed);
+    });
     // add each new feed to the list of feeds
     //  new_feeds = {};
 }
