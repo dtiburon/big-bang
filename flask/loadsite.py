@@ -1,5 +1,6 @@
 #import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+import json
 
 STATIC_PATH = "/static"
 STATIC_FOLDER = "static"
@@ -41,6 +42,16 @@ def admin(planetname):
 		# add error message
 	else:
 		return render_template('planet-admin')
+
+@app.route("/ws/planet/<planetname>", methods=["POST", "GET"])
+def ws_planet(planetname):
+    # use request object!
+    if request.method == "POST":
+        print request.json['feeds']
+    else: #GET
+        pass
+    return json.dumps({})
+
 
 if __name__ == "__main__":
     app.run(debug=True)

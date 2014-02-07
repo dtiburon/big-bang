@@ -64,8 +64,9 @@
 <script type="text/javascript" src="/static/js/jquery-1.10.2.min.js"></script>
 <!--<script type="text/javascript" src="/static/js/jquery.validate.1.11.1.min.js"></script>-->
 <script type="text/javascript">
-var num_feeds = 0
-var highest_feed_id = 20 // store this in DB to pull as needed; generate new #s when saving new feeds
+
+var highest_feed_id = 20; // store this value in DB to pull as needed; generate new #s counting up from here when saving new feeds
+var num_feeds = highest_feed_id + 1; // the next ID # to be assigned to a new feed
 
 $(document).ready(function() 
 {
@@ -101,20 +102,41 @@ function save()
     // todo: confirm password
     
     console.log("Saving feeds...");
+    var feeds_to_save = [];
     $("#all-feeds").children().each(function(index) {
 //        console.log("Feed index:" + index);
-        var feed_id = $(this).attr('id')
+        var feed_id = $(this).attr('id');
         console.log("Feed ID:" + feed_id);
         var id = feed_id.replace(/[^0-9]/g, ''); // strip non-numeric characters from feed ID to get the #
         console.log("number:" + id);
         feed = {};  // builds dictionary (hash) with data from a single feed
+        feed['id'] = id;
         feed['url'] = $("#feed-url-" + id).val();
         feed['name'] = $("#feed-name-" + id).val();
         feed['image'] = $("#feed-img-" + id).val();
         console.log(feed);
+        // add each new feed to the list of feeds
+        feeds_to_save.push(feed);
+        highest_feed_id = num_feeds;
     });
-    // add each new feed to the list of feeds
-    //  new_feeds = {};
+
+    $.ajax({
+            url: "/ws/planet/" + encodeURIComponent('wfs'), // where data should be saved (URL)
+            type: "POST", // specify http method
+            data : JSON.stringify({'feeds' : feeds_to_save}), // what data you want to post
+            dataType : "json", // specifies data type
+            contentType: "application/json; charset=utf-8", // json is always utf-8
+            success: function(json)
+            {
+                console.log("saved all feeds.");
+            },
+            error: function(xhr, txtStatus, errorThrown) // todo: fix error handling to integrate with existing Planeteria code
+            {
+                console.log("Failed to save planet feeds. Status: " + xhr.status);
+            }
+    });
+
+
 }
 </script>
 {% endblock %}
