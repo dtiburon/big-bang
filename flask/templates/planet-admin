@@ -65,36 +65,87 @@
 <!--<script type="text/javascript" src="/static/js/jquery.validate.1.11.1.min.js"></script>-->
 <script type="text/javascript">
 
-var highest_feed_id = 20; // store this value in DB to pull as needed; generate new #s counting up from here when saving new feeds
-var num_feeds = highest_feed_id + 1; // the next ID # to be assigned to a new feed
+var highest_feed_id = 0; // this is set in load_data_feed() from json data, updated with each save
+var next_id = highest_feed_id + 1; // next ID # to be assigned to a brand new feed (reset once highest_feed_id is set from json data)
+var planetname = 'wfs'
 
 $(document).ready(function() 
 {
     $( ".feedbtn-rm" ).click(del_feed);
-    add_feed();
+    load_feeds();
+    // if there are no feeds, load a single-feed box:
+    if (highest_feed_id == 0)
+    {
+        add_feed(next_id);
+    }
     console.log("Ready!");
 });
 
-function add_feed()
+function add_feed(id)
 {
+    // todo: make sure add_feed doesn't increment next_id when passing an existing id to the function from load_feed_data
+
     // clone the hidden template and make it visible
     $("#template-feed-form").children().clone(true).prependTo("#all-feeds");
     // add unique feed ID # to each field's id & name: feed-name, feed-url, feed-img
-    $("#all-feeds #feed").attr("id", "feed-" + num_feeds);
-    $("#all-feeds #feed-name").attr("id", "feed-name-" + num_feeds);
-    $("#all-feeds #feed-name").attr("name", "feed-name-" + num_feeds);
-    $("#all-feeds #feed-url").attr("id", "feed-url-" + num_feeds);
-    $("#all-feeds #feed-url").attr("name", "feed-url-" + num_feeds);
-    $("#all-feeds #feed-img").attr("id", "feed-img-" + num_feeds);
-    $("#all-feeds #feed-img").attr("name", "feed-img-" + num_feeds);
-    num_feeds++;
+    $("#all-feeds #feed").attr("id", "feed-" + id);
+    $("#all-feeds #feed-name").attr("id", "feed-name-" + id);
+    $("#all-feeds #feed-name").attr("name", "feed-name-" + id);
+    $("#all-feeds #feed-url").attr("id", "feed-url-" + id);
+    $("#all-feeds #feed-url").attr("name", "feed-url-" + id);
+    $("#all-feeds #feed-img").attr("id", "feed-img-" + id);
+    $("#all-feeds #feed-img").attr("name", "feed-img-" + id);
+
+    // if id is not a new one, increment the global id count: 
+    if (id <= highest_feed_id)
+    {
+        next_id++;
+    }
+
 }
 
 function del_feed()
 {
-    // todo: store deleted feed info to later delete from planet database
+    // todo: store deleted feed info to cross-reference with planet database and delete from existing database.
+    // another way to do this is to simply remove it from the dom and completely overwrite the database each save with only the feeds that are in the dom.
     $(this).parent().remove();
 }
+
+function load_feeds()
+{
+    // load all existing feeds when the page loads
+    // first, use ajax to get the saved feeds
+    $.ajax({
+            url: "/ws/planet/" + encodeURIComponent('wfs'), // !! how can I know the planetname when it's stored in the json feed? 
+            success: function(json)
+            {
+                load_feed_data(json);
+                console.log("all feeds loaded from database.");
+            },
+            error: function(xhr, txtStatus, errorThrown) // todo: fix error handling to integrate with existing Planeteria code
+            {
+                console.log("Failed to load planet feeds. Status: " + xhr.status);
+            }
+}
+
+function load_feed_data(json)
+{
+    // set globals from json data
+    planetname = json['planetname']
+    highest_feed_id = json['highest_feed_id']
+    next_id = highest_feed_id + 1
+
+    var feed_list = json['feeds']
+    for feed in feed_list:
+        var feed_id = feed['id']
+        // add a new .single-feed box div with feed fields using the feed's unique id
+        add_feed(feed_id)
+        // populate fields with feed data
+        $("#feed-name-" + feed_id).val(feed['name']);
+        $("#feed-url-" + feed_id).val(feed['url']);
+        $("#feed-img-").val(feed['image']);
+}
+
 
 function save()
 {
@@ -104,7 +155,6 @@ function save()
     console.log("Saving feeds...");
     var feeds_to_save = [];
     $("#all-feeds").children().each(function(index) {
-//        console.log("Feed index:" + index);
         var feed_id = $(this).attr('id');
         console.log("Feed ID:" + feed_id);
         var id = feed_id.replace(/[^0-9]/g, ''); // strip non-numeric characters from feed ID to get the #
@@ -117,13 +167,13 @@ function save()
         console.log(feed);
         // add each new feed to the list of feeds
         feeds_to_save.push(feed);
-        highest_feed_id = num_feeds;
+        var jdata = {'planetname':planetname, 'feeds':feeds_to_save, 'highest_feed_id':next_id};
     });
 
     $.ajax({
             url: "/ws/planet/" + encodeURIComponent('wfs'), // where data should be saved (URL)
             type: "POST", // specify http method
-            data : JSON.stringify({'feeds' : feeds_to_save}), // what data you want to post
+            data : JSON.stringify(jdata), // what data you want to post
             dataType : "json", // specifies data type
             contentType: "application/json; charset=utf-8", // json is always utf-8
             success: function(json)
@@ -135,7 +185,6 @@ function save()
                 console.log("Failed to save planet feeds. Status: " + xhr.status);
             }
     });
-
 
 }
 </script>

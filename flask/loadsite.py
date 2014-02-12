@@ -17,40 +17,39 @@ app = Flask(__name__,
 def index():
     return render_template('index')
 
-@app.route("/thanks") #url path
+@app.route("/thanks")
 def thanks():
     return render_template('thanks')
 
-@app.route("/tos") #url path
+@app.route("/tos")
 def tos():
     return render_template('tos')
 
-@app.route("/planet/<planetname>") #url path
+@app.route("/planet/<planetname>")
 def planet(planetname):
 	if not planetname:
 		planetname = "wfs" #for testing purposes
-		# return render_template('index')
-		# add error message
+		# replace with error message for launch
 	else:
 		return render_template('planet-feed')
 
-@app.route("/planet/<planetname>/admin") #url path
+@app.route("/planet/<planetname>/admin")
 def admin(planetname):
 	if not planetname:
 		planetname = "wfs" #for testing purposes
-		# return render_template('index')
-		# add error message
+		# replace with error message for launch
 	else:
-		return render_template('planet-admin')
+		return render_template('planet-admin', planetname=planetname) # Q: this should be done regardless of above conditional, right?
 
 @app.route("/ws/planet/<planetname>", methods=["POST", "GET"])
 def ws_planet(planetname):
     # use request object!
     if request.method == "POST":
         print request.json['feeds']
+        return json.dumps({})
     else: #GET
         pass
-    return json.dumps({})
+        # return some json-wrapped info to work with (what you loaded)
 
 
 if __name__ == "__main__":
