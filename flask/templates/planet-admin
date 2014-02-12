@@ -67,7 +67,7 @@
 
 var highest_feed_id = 0; // this is set in load_data_feed() from json data, updated with each save
 var next_id = highest_feed_id + 1; // next ID # to be assigned to a brand new feed (reset once highest_feed_id is set from json data)
-var planetname = 'wfs'
+var planetname = {{ planetname }}
 
 $(document).ready(function() 
 {
@@ -131,19 +131,22 @@ function load_feeds()
 function load_feed_data(json)
 {
     // set globals from json data
-    planetname = json['planetname']
-    highest_feed_id = json['highest_feed_id']
-    next_id = highest_feed_id + 1
-
-    var feed_list = json['feeds']
-    for feed in feed_list:
-        var feed_id = feed['id']
+    console.log("Loading feeds...");
+    highest_feed_id = json['highest_feed_id'];
+    next_id = highest_feed_id + 1;
+    var feed_list = json['feeds'];
+    var num_feeds = feed_list.length; 
+    console.log("Found "+num_feeds+" feeds to load.")
+    for (i = 0; i < num_feeds; i++) // == py: for feed in feed_list -- how do I name the item to work with it in js? 
+    {
+        var feed_id = feed['id'];
         // add a new .single-feed box div with feed fields using the feed's unique id
-        add_feed(feed_id)
+        add_feed(feed_id);
         // populate fields with feed data
         $("#feed-name-" + feed_id).val(feed['name']);
         $("#feed-url-" + feed_id).val(feed['url']);
         $("#feed-img-").val(feed['image']);
+    }
 }
 
 
