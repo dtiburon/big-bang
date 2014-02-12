@@ -50,9 +50,9 @@ def ws_planet(planetname):
         # test data:
         feeds_to_save = [{'id':22, 'url':'http://dtiburon.wordpress.com/feed', 'name':'Aleta Dunne', 'image':'https://dl.dropbox.com/u/6356650/clay_aleta_200x200.jpg'}, {'id':23, 'url':'http://thelittlerobotblogs.wordpress.com/feed/', 'name':'Ana Marian Pedro', 'image':'http://i.imgur.com/xXWG7.jpg'}, {'id':24, 'url':'http://wowsig.in/log/feed/', 'name':'Aakanksha Gaur', 'image':''}]
         jdata = {'planetname':'wfs', 'feeds':feeds_to_save, 'highest_feed_id':24}
-        json.dumps(jdata)
         # return some json-wrapped info to work with (what you loaded or test data)
-        return json.loads(jdata)
+        return json.dumps(jdata)
+        
 
 if __name__ == "__main__":
     app.run(debug=True)

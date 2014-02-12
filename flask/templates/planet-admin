@@ -67,14 +67,15 @@
 
 var highest_feed_id = 0; // this is set in load_data_feed() from json data, updated with each save
 var next_id = highest_feed_id + 1; // next ID # to be assigned to a brand new feed (reset once highest_feed_id is set from json data)
-var planetname = {{ planetname }}
+var planetname = 'wfs' // {{ planetname }} - troubleshoot this version; being passed through w/out quotes; js is interpreting it as a variable
+var feeds_loaded = 1
 
 $(document).ready(function() 
 {
     $( ".feedbtn-rm" ).click(del_feed);
     load_feeds();
     // if there are no feeds, load a single-feed box:
-    if (highest_feed_id == 0)
+    if (feeds_loaded == 0)
     {
         add_feed(next_id);
     }
@@ -83,10 +84,12 @@ $(document).ready(function()
 
 function add_feed(id)
 {
-    // todo: make sure add_feed doesn't increment next_id when passing an existing id to the function from load_feed_data
-
     // clone the hidden template and make it visible
     $("#template-feed-form").children().clone(true).prependTo("#all-feeds");
+    // specify default ID (when onclick is used):
+    if (typeof id === "undefined") {
+        id = next_id;
+    }
     // add unique feed ID # to each field's id & name: feed-name, feed-url, feed-img
     $("#all-feeds #feed").attr("id", "feed-" + id);
     $("#all-feeds #feed-name").attr("id", "feed-name-" + id);
@@ -96,10 +99,13 @@ function add_feed(id)
     $("#all-feeds #feed-img").attr("id", "feed-img-" + id);
     $("#all-feeds #feed-img").attr("name", "feed-img-" + id);
 
-    // if id is not a new one, increment the global id count: 
-    if (id <= highest_feed_id)
+    // if id is a new one, increment the global id count:
+    
+    if (id > highest_feed_id)
     {
+        console.log("highest_feed_id = " + highest_feed_id)
         next_id++;
+        console.log("added new feed window")
     }
 
 }
@@ -116,7 +122,8 @@ function load_feeds()
     // load all existing feeds when the page loads
     // first, use ajax to get the saved feeds
     $.ajax({
-            url: "/ws/planet/" + encodeURIComponent('wfs'), // !! how can I know the planetname when it's stored in the json feed? 
+            url: "/ws/planet/" + encodeURIComponent('wfs'), // todo: pass in planetname variable
+            dataType : "json", 
             success: function(json)
             {
                 load_feed_data(json);
@@ -126,6 +133,7 @@ function load_feeds()
             {
                 console.log("Failed to load planet feeds. Status: " + xhr.status);
             }
+    });
 }
 
 function load_feed_data(json)
@@ -135,18 +143,19 @@ function load_feed_data(json)
     highest_feed_id = json['highest_feed_id'];
     next_id = highest_feed_id + 1;
     var feed_list = json['feeds'];
-    var num_feeds = feed_list.length; 
-    console.log("Found "+num_feeds+" feeds to load.")
-    for (i = 0; i < num_feeds; i++) // == py: for feed in feed_list -- how do I name the item to work with it in js? 
+    var num_feeds = $(feed_list).size();
+    console.log("Found "+num_feeds+" feeds to load.");
+    for (i = 0; i < num_feeds; i++) 
     {
-        var feed_id = feed['id'];
+        var feed_id = feed_list[i]['id'];
         // add a new .single-feed box div with feed fields using the feed's unique id
         add_feed(feed_id);
         // populate fields with feed data
-        $("#feed-name-" + feed_id).val(feed['name']);
-        $("#feed-url-" + feed_id).val(feed['url']);
-        $("#feed-img-").val(feed['image']);
+        $("#feed-name-" + feed_id).val(feed_list[i]['name']);
+        $("#feed-url-" + feed_id).val(feed_list[i]['url']);
+        $("#feed-img-").val(feed_list[i]['image']);
     }
+    feeds_loaded = num_feeds
 }
 
 
@@ -170,15 +179,15 @@ function save()
         console.log(feed);
         // add each new feed to the list of feeds
         feeds_to_save.push(feed);
-        var jdata = {'planetname':planetname, 'feeds':feeds_to_save, 'highest_feed_id':next_id};
+        highest_feed_id = next_id
     });
 
     $.ajax({
-            url: "/ws/planet/" + encodeURIComponent('wfs'), // where data should be saved (URL)
-            type: "POST", // specify http method
-            data : JSON.stringify(jdata), // what data you want to post
-            dataType : "json", // specifies data type
-            contentType: "application/json; charset=utf-8", // json is always utf-8
+            url: "/ws/planet/" + encodeURIComponent('wfs'),
+            type: "POST", 
+            data : JSON.stringify({'planetname':planetname, 'feeds':feeds_to_save, 'highest_feed_id':highest_feed_id}), 
+            dataType : "json", 
+            contentType: "application/json; charset=utf-8", 
             success: function(json)
             {
                 console.log("saved all feeds.");
