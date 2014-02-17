@@ -67,15 +67,18 @@
 
 var highest_feed_id = 0; // this is set in load_data_feed() from json data, updated with each save
 var next_id = highest_feed_id + 1; // next ID # to be assigned to a brand new feed (reset once highest_feed_id is set from json data)
-var planetname = 'wfs' // {{ planetname }} - troubleshoot this version; being passed through w/out quotes; js is interpreting it as a variable
-var feeds_loaded = 1
+var planetname = "{{ planetname }}"; 
+var feeds_loaded = 1;
+var new_planet = {{ new }};
 
 $(document).ready(function() 
 {
     $( ".feedbtn-rm" ).click(del_feed);
-    load_feeds();
-    // if there are no feeds, load a single-feed box:
-    if (feeds_loaded == 0)
+    if (new_planet == 0) {
+        load_feeds();
+    }
+    else
+    // if there are no feeds to load, load a single-feed box:
     {
         add_feed(next_id);
     }
@@ -103,9 +106,9 @@ function add_feed(id)
     
     if (id > highest_feed_id)
     {
-        console.log("highest_feed_id = " + highest_feed_id)
+        console.log("highest_feed_id = " + highest_feed_id);
         next_id++;
-        console.log("added new feed window")
+        console.log("added new feed window; next_id is now " + next_id);
     }
 
 }
@@ -113,7 +116,7 @@ function add_feed(id)
 function del_feed()
 {
     // todo: store deleted feed info to cross-reference with planet database and delete from existing database.
-    // another way to do this is to simply remove it from the dom and completely overwrite the database each save with only the feeds that are in the dom.
+    // another way to do this is to simply remove a deleted feed from the dom and completely overwrite the database each save with only the feeds that are in the dom when saving.
     $(this).parent().remove();
 }
 
@@ -168,10 +171,8 @@ function save()
     var feeds_to_save = [];
     $("#all-feeds").children().each(function(index) {
         var feed_id = $(this).attr('id');
-        console.log("Feed ID:" + feed_id);
         var id = feed_id.replace(/[^0-9]/g, ''); // strip non-numeric characters from feed ID to get the #
-        console.log("number:" + id);
-        feed = {};  // builds dictionary (hash) with data from a single feed
+        feed = {};
         feed['id'] = id;
         feed['url'] = $("#feed-url-" + id).val();
         feed['name'] = $("#feed-name-" + id).val();
@@ -179,8 +180,9 @@ function save()
         console.log(feed);
         // add each new feed to the list of feeds
         feeds_to_save.push(feed);
-        highest_feed_id = next_id
     });
+    highest_feed_id = next_id
+    console.log("highest_feed_id is now reset at " + highest_feed_id)
 
     $.ajax({
             url: "/ws/planet/" + encodeURIComponent('wfs'),
