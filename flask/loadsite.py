@@ -27,25 +27,25 @@ def thanks():
 def tos():
     return render_template('tos')
 
-@app.route("/planet/<planetname>")
-def planet(planetname):
-    if not planetname:
-        planetname = "wfs" #for testing purposes
+@app.route("/planet/<planetdir>")
+def planet(planetdir):
+    if not planetdir:
+        planetdir = "wfs" #for testing purposes
         # replace with error message for launch
     else:
         return render_template('planet-feed')
 
-@app.route("/planet/<planetname>/admin")
-def admin(planetname):
-    if not planetname:
-        # planetname = "wfs" #for testing purposes
+@app.route("/planet/<planetdir>/admin")
+def admin(planetdir):
+    if not planetdir:
+        # planetdir = "wfs" #for testing purposes
         raise BadRequest(description="Cannot load. Planet name missing.")
     new = int(request.args.get('new', "0"))  # URL would be something like http://127.0.0.1:5000/planet/wfs/admin?new=1
     print "Is planet new?", new
-    return render_template('planet-admin', planetname=planetname, new=new)
+    return render_template('planet-admin', planetdir=planetdir, new=new)
 
-@app.route("/ws/planet/<planetname>", methods=["POST", "GET"])
-def ws_planet(planetname):
+@app.route("/ws/planet/<planetdir>", methods=["POST", "GET"])
+def ws_planet(planetdir):
     """Loads and saves feed data.
     Simply saves data to a file as a temporary measure for testing. 
     Real database to be added later.
@@ -55,7 +55,7 @@ def ws_planet(planetname):
     if request.method == "POST":
         try:
             # 1. open file for writing
-            datafile = open(os.path.join(DATA_DIR, planetname), 'w')
+            datafile = open(os.path.join(DATA_DIR, planetdir), 'w')
             # 2. write to file
             datafile.write(request.data)
             # 3. close it
@@ -69,12 +69,12 @@ def ws_planet(planetname):
 
         # test data:
         # feeds_to_save = [{'id':22, 'url':'http://dtiburon.wordpress.com/feed', 'name':'Aleta Dunne', 'image':'https://dl.dropbox.com/u/6356650/clay_aleta_200x200.jpg'}, {'id':23, 'url':'http://thelittlerobotblogs.wordpress.com/feed/', 'name':'Ana Marian Pedro', 'image':'http://i.imgur.com/xXWG7.jpg'}, {'id':24, 'url':'http://wowsig.in/log/feed/', 'name':'Aakanksha Gaur', 'image':''}]
-        # jdata = {'planetname':'wfs', 'feeds':feeds_to_save, 'highest_feed_id':24}
+        # jdata = {'planetdir':'wfs', 'feeds':feeds_to_save, 'highest_feed_id':24}
         # return some json-wrapped info to work with (what you loaded or test data)
         # return json.dumps(jdata)
 
         try:
-            datafile = open(os.path.join(DATA_DIR, planetname), 'rbU')
+            datafile = open(os.path.join(DATA_DIR, planetdir), 'rbU')
             jdata = datafile.read()
             datafile.close()
         except IOError:
