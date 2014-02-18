@@ -1,13 +1,27 @@
 {% extends 'layout-planet' %}
 {% block body %}
             <div class="span8 box"><!-- left column (Feed Management) -->
-                <h3>Edit Planet Feeds</h3>
-                <a class="btn btn-small btn-success" id="feedbtn-add" onclick='add_feed()'><i class="icon-plus icon-white"></i> Add</a> and <a class="btn btn-small btn-danger" href="#"><i class="icon-white icon-remove"></i> Remove</a> feeds as needed.</p>
+                <h3>Edit Planet</h3>
                 <form class="feed-form">
                     <div class="form-inline">
-                        When finished making changes, be sure to save them: <input type="password" class="input-small" placeholder="Password"> <a class="btn btn-success submit-button" onclick="save()" title="Save all changes">Save</a>
+                        <p>When finished making changes, be sure to save them: <input type="password" class="input-small" placeholder="Password"> <button type="submit" class="btn btn-success">Save</button></p>
+                    </div> <!-- / .form-inline -->
+                    <fieldset>
+                        <label>Planet Name</label>
+                        <input type="text" class="span12">
+                        <span class="help-block">This will be the heading that appears at the top of your Planet</span>
+
+                        <label>Planet Description</label>
+                        <textarea rows="5" class="span12"></textarea>
+                        <span class="help-block">Describe the planet theme/topic and any other relevant information such as IRC channel.</span>
+                    </fieldset>
+                <hr>
+                <h3>Planet Feeds</h3>
+                    <div class="form-inline">                    
+                        <p><a class="btn btn-small btn-success" id="feedbtn-add" onclick='add_feed()'><i class="icon-plus icon-white"></i> Add</a> and <a class="btn btn-small btn-danger" href="#"><i class="icon-white icon-remove"></i> Remove</a> feeds as needed.</p>
                     </div> <!-- / .form-inline -->
 
+                    <!-- Template for feed box -->
                     <div style="display: none" id="template-feed-form"><!-- template for form box that adds a single feed -->
                         <div class="single-feed box" id="feed">
                             <div class="image-holder">
@@ -33,34 +47,12 @@
                     </div> <!-- / all feeds wrapper -->
 
                 </form> <!-- / feed form -->
-            </div><!-- / .span8 (feed management column) -->
+            </div><!-- / .span8 (planet admin form column) -->
 
-            <div class="span4"> <!-- Right Column -->
-                <div id="config-form" class="sidebar box"> <!-- Planet Config Form -->
-                    <h4>Edit Planet Configuration</h4>
-                    <form class="feed-form">
-                        <fieldset>
-                            <label>Planet Name</label>
-                            <input type="text">
-                            <span class="help-block">This will be the heading that appears at the top of your Planet's feed.</span>
+            <div class="span3"><!-- column for donate box -->
+                {% include 'donate' %}
+            </div><!-- / .span3 (donate box column)-->
 
-                            <label>Planet Administrator(s)</label>
-                            <input type="text">
-                            <span class="help-block">Name of the administrator (if there is more than one, list all names, separated with commas).</span>
-
-                            <label>Administrator Email</label>
-                            <input type="text">
-                            <span class="help-block">This email address is viewable by anybody who comes to this page or pulls the planet's feed. You might consider using something other than your personal email account.</span>
-
-                            <label>Change Password</label>
-                            <input type="text" placeholder="New password">
-                        </fieldset>
-                        <hr>
-                            <label class="text-error">Save Configuration Changes:</label>
-                            <input type="password" class="input-small" placeholder="Current Password"> <button type="submit" class="btn btn-success">Save</button>
-                    </form>
-                </div> <!--/ .sidebar .box #config-form-->
-            </div><!-- / .span4 (right column) -->
 <script type="text/javascript" src="/static/js/jquery-1.10.2.min.js"></script>
 <!--<script type="text/javascript" src="/static/js/jquery.validate.1.11.1.min.js"></script>-->
 <script type="text/javascript">
@@ -116,14 +108,12 @@ function add_feed(id)
 function del_feed()
 {
     // todo: store deleted feed info to cross-reference with planet database and delete from existing database.
-    // another way to do this is to simply remove a deleted feed from the dom and completely overwrite the database each save with only the feeds that are in the dom when saving.
     $(this).parent().remove();
 }
 
 function load_feeds()
 {
     // load all existing feeds when the page loads
-    // first, use ajax to get the saved feeds
     $.ajax({
             url: "/ws/planet/" + encodeURIComponent('wfs'), // todo: pass in planetname variable
             dataType : "json", 
@@ -166,12 +156,12 @@ function save()
 {
     // todo: add form validation
     // todo: confirm password
-    
     console.log("Saving feeds...");
     var feeds_to_save = [];
     $("#all-feeds").children().each(function(index) {
         var feed_id = $(this).attr('id');
-        var id = feed_id.replace(/[^0-9]/g, ''); // strip non-numeric characters from feed ID to get the #
+        // strip non-numeric characters from feed ID to get the #
+        var id = feed_id.replace(/[^0-9]/g, ''); 
         feed = {};
         feed['id'] = id;
         feed['url'] = $("#feed-url-" + id).val();
@@ -194,7 +184,8 @@ function save()
             {
                 console.log("saved all feeds.");
             },
-            error: function(xhr, txtStatus, errorThrown) // todo: fix error handling to integrate with existing Planeteria code
+            // todo: fix error handling to integrate with existing Planeteria code
+            error: function(xhr, txtStatus, errorThrown) 
             {
                 console.log("Failed to save planet feeds. Status: " + xhr.status);
             }
