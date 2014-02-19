@@ -40,9 +40,9 @@ def admin(planetdir):
     if not planetdir:
         # planetdir = "wfs" #for testing purposes
         raise BadRequest(description="Cannot load. Planet name missing.")
-    new = int(request.args.get('new', "0"))  # URL would be something like http://127.0.0.1:5000/planet/wfs/admin?new=1
-    print "Is planet new?", new
-    return render_template('planet-admin', planetdir=planetdir, new=new)
+    new_planet = int(request.args.get('new', "0"))  # URL would be something like http://127.0.0.1:5000/planet/wfs/admin?new=1
+    print "Is planet new?", new_planet
+    return render_template('planet-admin', planetdir=planetdir, new_planet=new_planet) # pass in any variables to be used in template
 
 @app.route("/ws/planet/<planetdir>", methods=["POST", "GET"])
 def ws_planet(planetdir):
@@ -53,6 +53,7 @@ def ws_planet(planetdir):
     print "load/save"
     # use request object
     if request.method == "POST":
+        print "Saving"
         try:
             # 1. open file for writing
             datafile = open(os.path.join(DATA_DIR, planetdir), 'w')
@@ -66,7 +67,7 @@ def ws_planet(planetdir):
         return json.dumps({})
 
     else: #GET
-
+        print "Loading"
         # test data:
         # feeds_to_save = [{'id':22, 'url':'http://dtiburon.wordpress.com/feed', 'name':'Aleta Dunne', 'image':'https://dl.dropbox.com/u/6356650/clay_aleta_200x200.jpg'}, {'id':23, 'url':'http://thelittlerobotblogs.wordpress.com/feed/', 'name':'Ana Marian Pedro', 'image':'http://i.imgur.com/xXWG7.jpg'}, {'id':24, 'url':'http://wowsig.in/log/feed/', 'name':'Aakanksha Gaur', 'image':''}]
         # jdata = {'planetdir':'wfs', 'feeds':feeds_to_save, 'highest_feed_id':24}

@@ -4,15 +4,15 @@
                 <h3>Edit Planet</h3>
                 <form class="feed-form">
                     <div class="form-inline">
-                        <p>When finished making changes, be sure to save them: <input type="password" class="input-small" placeholder="Password"> <button type="submit" class="btn btn-success">Save</button></p>
+                        <p>When finished making changes, be sure to save them: <input type="password" class="input-small" placeholder="Password"> <a class="btn btn-success submit-button" onclick="save()" title="Save all changes">Save</a></p>
                     </div> <!-- / .form-inline -->
                     <fieldset>
                         <label>Planet Name</label>
-                        <input type="text" class="span12">
+                        <input type="text" class="span12" id="planet-name" name="planet-name" required>
                         <span class="help-block">This will be the heading that appears at the top of your Planet</span>
 
                         <label>Planet Description</label>
-                        <textarea rows="5" class="span12"></textarea>
+                        <textarea rows="5" class="span12" id="planet-desc" name="planet-desc"></textarea>
                         <span class="help-block">Describe the planet theme/topic and any other relevant information such as IRC channel.</span>
                     </fieldset>
                 <hr>
@@ -30,11 +30,11 @@
                             <a class="btn btn-mini btn-danger feedbtn-rm" id="rm" title="Remove this feed"><i class="icon-white icon-remove"></i></a>
                             <fieldset>
                                 <label>Feed Name</label>
-                                <input type="text" id="feed-name" name="feed-name" placeholder="Blog author or title" required>
+                                <input type="text" id="feed-name" name="feed-name" placeholder="Blog author or title">
                                 <span class="help-block">This will be displayed at the top of the blog's entries and in the list of feeds.</span>
 
                                 <label>Feed URL</label>
-                                <input type="text" id="feed-url" name="feed-url" placeholder="http://blog-url.com/rss.xml" required>
+                                <input type="text" id="feed-url" name="feed-url" placeholder="http://blog-url.com/rss.xml">
 
                                 <label>Image URL (optional)</label>
                                 <input type="text" id="feed-img" name="feed-img" placeholder="http://">
@@ -49,7 +49,7 @@
                 </form> <!-- / feed form -->
             </div><!-- / .span8 (planet admin form column) -->
 
-            <div class="span3"><!-- column for donate box -->
+            <div class="span4"><!-- column for donate box -->
                 {% include 'donate' %}
             </div><!-- / .span3 (donate box column)-->
 
@@ -59,15 +59,17 @@
 
 var highest_feed_id = 0; // this is set in load_data_feed() from json data, updated with each save
 var next_id = highest_feed_id + 1; // next ID # to be assigned to a brand new feed (reset once highest_feed_id is set from json data)
-var planetdir = "{{ planetdir }}"; 
+var planetdir = "{{ planetdir }}";
 var feeds_loaded = 1;
-var new_planet = {{ new }};
+var new_planet = {{ new_planet }};
+var planet_name = "";
+
 
 $(document).ready(function() 
 {
     $( ".feedbtn-rm" ).click(del_feed);
     if (new_planet == 0) {
-        load_feeds();
+        load_planet();
     }
     else
     // if there are no feeds to load, load a single-feed box:
@@ -111,15 +113,15 @@ function del_feed()
     $(this).parent().remove();
 }
 
-function load_feeds()
+function load_planet()
 {
     // load all existing feeds when the page loads
     $.ajax({
-            url: "/ws/planet/" + encodeURIComponent('{{ planetdir }}'), // todo: pass in planetdir variable
+            url: "/ws/planet/" + encodeURIComponent('{{ planetdir }}'),
             dataType : "json", 
             success: function(json)
             {
-                load_feed_data(json);
+                load_planet_data(json);
                 console.log("all feeds loaded from database.");
             },
             error: function(xhr, txtStatus, errorThrown) // todo: fix error handling to integrate with existing Planeteria code
@@ -129,12 +131,20 @@ function load_feeds()
     });
 }
 
-function load_feed_data(json)
+function load_planet_data(json)
 {
     // set globals from json data
-    console.log("Loading feeds...");
+    console.log("Loading planet...");
+    planet_name = json['planet_name'];
+    planet_desc = json['planet_desc'];
     highest_feed_id = json['highest_feed_id'];
     next_id = highest_feed_id + 1;
+
+    // populate planet fields with planet data
+    $("#planet-name").val(planet_name);
+    $("#planet-desc").val(planet_desc);
+
+    // prepare variables to populate feed list
     var feed_list = json['feeds'];
     var num_feeds = $(feed_list).size();
     console.log("Found "+num_feeds+" feeds to load.");
@@ -143,12 +153,12 @@ function load_feed_data(json)
         var feed_id = feed_list[i]['id'];
         // add a new .single-feed box div with feed fields using the feed's unique id
         add_feed(feed_id);
-        // populate fields with feed data
+        // populate feed fields with feed data
         $("#feed-name-" + feed_id).val(feed_list[i]['name']);
         $("#feed-url-" + feed_id).val(feed_list[i]['url']);
         $("#feed-img-").val(feed_list[i]['image']);
     }
-    feeds_loaded = num_feeds
+    feeds_loaded = num_feeds;
 }
 
 
@@ -156,6 +166,12 @@ function save()
 {
     // todo: add form validation
     // todo: confirm password
+    console.log("Saving planet data...");
+    planet_name = $("#planet-name").val();
+    console.log("Planet name is" + planet_name);
+    planet_desc = $("#planet-desc").val();
+    console.log("Planet description is" + planet_desc);
+
     console.log("Saving feeds...");
     var feeds_to_save = [];
     $("#all-feeds").children().each(function(index) {
@@ -174,10 +190,11 @@ function save()
     highest_feed_id = next_id
     console.log("highest_feed_id is now reset at " + highest_feed_id)
 
+
     $.ajax({
-            url: "/ws/planet/" + encodeURIComponent('wfs'),
+            url: "/ws/planet/" + encodeURIComponent('{{ planetdir }}'),
             type: "POST", 
-            data : JSON.stringify({'planetdir':planetdir, 'feeds':feeds_to_save, 'highest_feed_id':highest_feed_id}), 
+            data : JSON.stringify({'planetdir':planetdir, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds_to_save, 'highest_feed_id':highest_feed_id}), 
             dataType : "json", 
             contentType: "application/json; charset=utf-8", 
             success: function(json)
