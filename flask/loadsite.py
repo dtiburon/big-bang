@@ -6,7 +6,7 @@ from werkzeug.exceptions import ServiceUnavailable, BadRequest, InternalServerEr
 STATIC_PATH = "/static"
 STATIC_FOLDER = "static"
 TEMPLATE_FOLDER = "templates"
-DATA_DIR = "data"
+DATA_DIR = "data" # temporary place to store data w/out a database for testing
 
 app = Flask(__name__,
             static_url_path = STATIC_PATH,
@@ -15,7 +15,7 @@ app = Flask(__name__,
 
 # to load any of the pages below, enter Flask ip address as URL + url path indicated in app route.
 # failing to do this will cause a 404 or direct you to the homepage.
-@app.route("/") #url path
+@app.route("/")
 def index():
     return render_template('index')
 
@@ -30,8 +30,8 @@ def tos():
 @app.route("/planet/<planetdir>")
 def planet(planetdir):
     if not planetdir:
-        planetdir = "wfs" #for testing purposes
-        # replace with error message for launch
+        # planetdir = "wfs" #for testing purposes
+        raise BadRequest(description="Cannot load. Planet name missing.")
     else:
         return render_template('planet-feed')
 
@@ -40,9 +40,14 @@ def admin(planetdir):
     if not planetdir:
         # planetdir = "wfs" #for testing purposes
         raise BadRequest(description="Cannot load. Planet name missing.")
-    new_planet = int(request.args.get('new', "0"))  # URL would be something like http://127.0.0.1:5000/planet/wfs/admin?new=1
+
+    # look for arguments in URL to indicate whether it's a new planet (in which case there are no feeds to be loaded)
+    # todo: planet creation form should send user to URL http://planeteria.org/planet/<planetdir>/admin?new=1
+    new_planet = int(request.args.get('new', "0"))  
     print "Is planet new?", new_planet
-    return render_template('planet-admin', planetdir=planetdir, new_planet=new_planet) # pass in any variables to be used in template
+
+    # render template and pass in any variables to be used in template
+    return render_template('planet-admin', planetdir=planetdir, new_planet=new_planet) 
 
 @app.route("/ws/planet/<planetdir>", methods=["POST", "GET"])
 def ws_planet(planetdir):
@@ -50,20 +55,20 @@ def ws_planet(planetdir):
     Simply saves data to a file as a temporary measure for testing. 
     Real database to be added later.
     """
-    print "load/save"
     # use request object
+
+    print "load/save" # to verify function is triggered
+
     if request.method == "POST":
         print "Saving"
         try:
-            # 1. open file for writing
             datafile = open(os.path.join(DATA_DIR, planetdir), 'w')
-            # 2. write to file
             datafile.write(request.data)
-            # 3. close it
             datafile.close()
         except IOError:
             raise InternalServerError(description="Failed to save planet feed data.")
 
+        # Although we have saved the data above, Flask requires returning JSON data
         return json.dumps({})
 
     else: #GET
