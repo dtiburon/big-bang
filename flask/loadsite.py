@@ -33,7 +33,7 @@ def planet(planetdir):
         # planetdir = "wfs" #for testing purposes
         raise BadRequest(description="Cannot load. Planet name missing.")
     else:
-        return render_template('planet-feed')
+        return render_template('planet-feed', planetdir=planetdir)
 
 @app.route("/planet/<planetdir>/admin")
 def admin(planetdir):

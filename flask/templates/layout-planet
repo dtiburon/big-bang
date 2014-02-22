@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="span10">
-                <h1 id="page-title">Women in Free Software</h1><!-- todo: generate title dynamically (planet name) -->
+                <h1 id="page-title">Women in Free Software</h1><!-- todo: generate title dynamically with {{ planet_name }} -->
                 <h5 id="header-slogan">Planeteria: Blog aggregation by your community, for your community.</h5>
             </div>
         </div>
