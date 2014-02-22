@@ -65,7 +65,7 @@ var new_planet = {{ new_planet }};
 var planet_name = "";
 
 
-$(document).ready(function() 
+$(document).ready(function()
 {
     $( ".feedbtn-rm" ).click(del_feed);
     if (new_planet == 0) {
@@ -177,7 +177,7 @@ function save()
     $("#all-feeds").children().each(function(index) {
         var feed_id = $(this).attr('id');
         // strip non-numeric characters from feed ID to get the #
-        var id = feed_id.replace(/[^0-9]/g, ''); 
+        var id = feed_id.replace(/[^0-9]/g, '');
         feed = {};
         feed['id'] = id;
         feed['url'] = $("#feed-url-" + id).val();
@@ -187,7 +187,7 @@ function save()
         // add each new feed to the list of feeds
         feeds_to_save.push(feed);
     });
-    highest_feed_id = next_id
+    highest_feed_id = next_id;
     console.log("highest_feed_id is now reset at " + highest_feed_id)
 
 
