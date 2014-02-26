@@ -1,4 +1,4 @@
-{% extends 'layout-planet' %}
+{% extends 'layout-site' %}
 {% block body %}
             <div class="span8 box"><!-- left column (Feed Management) -->
                 <h3>Edit Planet</h3>

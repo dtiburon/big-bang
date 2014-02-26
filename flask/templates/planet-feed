@@ -1,4 +1,4 @@
-{% extends 'layout-planet' %}
+{% extends 'layout-site' %}
 {% block body %}
 <!-- END HEADER TEMPLATE, START BODY -->
             <div class="span9"><!-- Body Text -->
@@ -40,8 +40,8 @@
                     <h4>About this Planet</h4>
                     <div id="description"></div>
                     <h4>Planet Admin</h4>
-                    To give feedback or request a change, email <a href="admin_email">admin_name</a>.
-                    <h5><a href="admin_url">Admin Interface</a></h5>
+                    To give feedback or request a change, email <a href="admin_email">admin_name</a>. 
+                    <h5><a href="/admin">Admin Interface</a></h5>
                 </div>
                 <div class="sidebar box">
                     <h4>Copyright</h4>
@@ -106,13 +106,14 @@ function load_planet_data(jdata) {
     console.log("Planet name is: " + planet_name)
     console.log("Planet description: " + planet_desc)
     $('#description').append(planet_desc)
+    $('#page-title h1').append(": " + planet_name)
     // load list of feeds from database
     var feed_list = jdata['feeds'];
     var num_feeds = $(feed_list).size();
     console.log("Found "+num_feeds+" feeds in this planet:");
     for (i = 0; i < num_feeds; i++) {
         // feed = {'id':21, 'url':'http://dtiburon.wordpress.com/rss', 'name':'Aletas blog', 'image':'http://imgur.com/4738y69'}
-        var blogitem = $('<li><a href="'+feed_list[i]['url']+'"><img src="/static/img/feed-icon-10x10.png"></a>'+feed_list[i]['name']+'</li>')
+        var blogitem = $('<li><a href="'+feed_list[i]['url']+'"><img src="/static/img/feed-icon-10x10.png"></a> '+feed_list[i]['name']+'</li>')
         $('#feedlist').append(blogitem)
     }
 }

@@ -8,7 +8,7 @@
     <div class="row-fluid" id="header-wrapper">
         <div class="span2">
           <div id="header-image" class="hidden-phone">
-            <img src="static/img/planeteria_200.png" width="150px">
+            <img src="/static/img/planeteria_200.png" width="150px">
           </div>
         </div>
         <div class="span10" id="page-title">
@@ -28,6 +28,6 @@
       </footer>
   </div> <!-- /container -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="static/js/bootstrap.min-2.2.2.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min-2.2.2.js"></script>
 </body>
 </html>
