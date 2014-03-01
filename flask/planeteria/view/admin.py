@@ -19,33 +19,33 @@ def thanks():
 def tos():
     return render_template('tos')
 
-@app.route("/planet/<planetdir>")
-def planet(planetdir):
-    if not planetdir:
-        # planetdir = "wfs" #for testing purposes
+@app.route("/planet/<slug>")
+def planet(slug):
+    if not slug:
+        # slug = "wfs" #for testing purposes
         raise BadRequest(description="Cannot load. Planet name missing.")
     else:
-        return render_template('planet-feed', planetdir=planetdir)
+        return render_template('planet-feed', slug=slug)
 
-@app.route("/planet/<planetdir>/admin")
-def admin(planetdir):
-    if not planetdir:
-        # planetdir = "wfs" #for testing purposes
+@app.route("/planet/<slug>/admin")
+def admin(slug):
+    if not slug:
+        # slug = "wfs" #for testing purposes
         raise BadRequest(description="Cannot load. Planet name missing.")
 
     # look for arguments in URL to indicate whether it's a new planet (in which case there are no feeds to be loaded)
-    # todo: planet creation form should send user to URL http://planeteria.org/planet/<planetdir>/admin?new=1
+    # todo: planet creation form should send user to URL http://planeteria.org/planet/<slug>/admin?new=1
     new_planet = int(request.args.get('new', "0"))  
     print "Is planet new?", new_planet
 
     # render template and pass in any variables to be used in template
-    return render_template('planet-admin', planetdir=planetdir, new_planet=new_planet) 
+    return render_template('planet-admin', slug=slug, new_planet=new_planet) 
 
 # for testing - replace with sqlite database
 from planeteria import DATA_DIR
 
-@app.route("/ws/planet/<planetdir>", methods=["POST", "GET"])
-def ws_planet(planetdir):
+@app.route("/ws/planet/<slug>", methods=["POST", "GET"])
+def ws_planet(slug):
     """Loads and saves feed data.
     Simply saves data to a file as a temporary measure for testing. 
     Real database to be added later.
@@ -57,7 +57,7 @@ def ws_planet(planetdir):
     if request.method == "POST":
         print "Saving"
         try:
-            datafile = open(os.path.join(DATA_DIR, planetdir), 'w')
+            datafile = open(os.path.join(DATA_DIR, slug), 'w')
             datafile.write(request.data)
             datafile.close()
         except IOError:
@@ -70,12 +70,12 @@ def ws_planet(planetdir):
         print "Loading"
         # test data:
         # feeds_to_save = [{'id':22, 'url':'http://dtiburon.wordpress.com/feed', 'name':'Aleta Dunne', 'image':'https://dl.dropbox.com/u/6356650/clay_aleta_200x200.jpg'}, {'id':23, 'url':'http://thelittlerobotblogs.wordpress.com/feed/', 'name':'Ana Marian Pedro', 'image':'http://i.imgur.com/xXWG7.jpg'}, {'id':24, 'url':'http://wowsig.in/log/feed/', 'name':'Aakanksha Gaur', 'image':''}]
-        # jdata = {'planetdir':'wfs', 'feeds':feeds_to_save, 'highest_feed_id':24}
+        # jdata = {'slug':'wfs', 'feeds':feeds_to_save, 'highest_feed_id':24}
         # return some json-wrapped info to work with (what you loaded or test data)
         # return json.dumps(jdata)
 
         try:
-            datafile = open(os.path.join(DATA_DIR, planetdir), 'rbU')
+            datafile = open(os.path.join(DATA_DIR, slug), 'rbU')
             jdata = datafile.read()
             datafile.close()
         except IOError:

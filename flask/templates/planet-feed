@@ -68,7 +68,7 @@
 <!--<script type="text/javascript" src="/static/js/jquery.validate.1.11.1.min.js"></script>-->
 <script type="text/javascript">
 
-var planetdir = "{{ planetdir }}";
+var slug = "{{ slug }}";
 var planet_name = ""
 var planet_desc = ""
 
@@ -76,15 +76,15 @@ $(document).ready(function()
 {
     // on pageload: 
     // 1. Load planet data: Name, description, contact, list of feeds.
-    load_planet(planetdir);
+    load_planet(slug);
 
     // 2. pull database of feed content for each feed in feed list, populate feed display
 });
 
-function load_planet(planetdir) {
-    console.log("Loading " + planetdir);
+function load_planet(slug) {
+    console.log("Loading " + slug);
     $.ajax({
-            url: "/ws/planet/" + encodeURIComponent(planetdir),
+            url: "/ws/planet/" + encodeURIComponent(slug),
             dataType : "json", 
             success: function(jdata)
             {
@@ -100,7 +100,7 @@ function load_planet(planetdir) {
 
 function load_planet_data(jdata) {
     console.log("Loading planet data");
-    //jdata = {'planetdir':planetdir, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':list_of_feeds}
+    //jdata = {'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':list_of_feeds}
     planet_name = jdata['planet_name']
     planet_desc = jdata['planet_desc']
     console.log("Planet name is: " + planet_name)
