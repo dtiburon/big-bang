@@ -18,7 +18,6 @@ class Planet(db.Model):
 
     query = db.session.query_property()  # creates an object for query - important
     def __init__(self, slug = u'', name = u'', desc = u'', user = 0): 
-        self.id = id
         self.name = name
         self.desc = desc
         self.slug = slug
