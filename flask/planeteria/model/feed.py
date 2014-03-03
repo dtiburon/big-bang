@@ -19,11 +19,11 @@ class Feed(db.Model):
     UniqueConstraint('planet', 'url', name='feed_planet_url_undx')
 
     query = db.session.query_property()
-    def __init__(self, url = u'', name = u'', image = u'', planet = 0): 
+    def __init__(self, url = u'', name = u'', image = u'', planet_id = 0): 
         self.url = url
         self.name = name
         self.image = image
-        self.planet = planet
+        self.planet_id = planet_id
 
     def __str__(self): 
     # print string for the object

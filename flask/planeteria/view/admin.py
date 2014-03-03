@@ -3,6 +3,7 @@ from flask import Flask, render_template, request
 import json
 from werkzeug.exceptions import ServiceUnavailable, BadRequest, InternalServerError
 from planeteria.model.planet import Planet
+from planeteria.model.feed import Feed
 from planeteria import app, db
 
 # to load any of the pages below, enter Flask ip address as URL + url path indicated in app route.
@@ -57,12 +58,11 @@ def ws_planet(slug):
         print "Saving"
 
         data = request.json
-        print data
-        print "Planet id:", data['planet_id']
-        print "Type:", type(data['planet_id'])
-
-        if data['planet_id'] > 0: # if planet already exists in the DB
+        planet_id = data['planet_id']
+        if planet_id > 0: # if planet already exists in the DB
             planet = Planet.query.filter_by(slug=slug).first()
+
+            db_feeds = Feed.query.filter_by(planet_id=planet_id).all()
 
         else: # if a new planet that doesn't exist in the DB
             planet = Planet()
@@ -72,6 +72,17 @@ def ws_planet(slug):
             planet.slug = data['slug']
             planet.name = data['planet_name']
             planet.desc = data['planet_desc']
+
+            # Save all feeds. todo: check to see if it's in the DB, only add if it's not there.
+            # todo: delete feeds that are in the DB but not in the data['feeds'] list.
+            feeds_to_save = data['feeds']
+            for fi in feeds_to_save:
+                feed = Feed()
+                feed.name = fi['name']
+                feed.url = fi['url']
+                feed.image = fi['image']
+                feed.planet_id = data['planet_id']
+                db.session.add(feed)
 
         except ValueError:
             raise BadRequest(description="Failed to map planet metadata to database table")
@@ -91,7 +102,18 @@ def ws_planet(slug):
         planet_id = planet.id
 
         # load planet feeds (todo):
+        
+        db_feeds = Feed.query.filter_by(planet_id=planet_id).all()
         feeds = []
+        # build feed list from DB feeds for jsonification
+        for i in db_feeds:
+            feed = {}
+            feed['id'] = i.id
+            feed['url'] = i.url
+            feed['name'] = i.name
+            feed['image'] = i.image
+            feeds.append(feed)
+        print feeds
 
         # package data for jsonification
         jdata = {'planet_id':planet_id, 'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds}
