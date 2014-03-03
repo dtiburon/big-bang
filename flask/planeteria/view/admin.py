@@ -56,12 +56,18 @@ def ws_planet(slug):
     if request.method == "POST":
         print "Saving"
 
-        data = request.json 
+        data = request.json
+        print data
+        print "Planet id:", data['planet_id']
+        print "Type:", type(data['planet_id'])
 
-        # Assuming for now it's a new planet that doesn't exist in the DB.
+        if data['planet_id'] > 0: # if planet already exists in the DB
+            planet = Planet.query.filter_by(slug=slug).first()
+
+        else: # if a new planet that doesn't exist in the DB
+            planet = Planet()
+        
         # Save planet data in Planet table
-        planet = Planet()
-
         try:
             planet.slug = data['slug']
             planet.name = data['planet_name']
@@ -88,7 +94,7 @@ def ws_planet(slug):
         feeds = []
 
         # package data for jsonification
-        jdata = {'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds}
+        jdata = {'planet_id':planet_id, 'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds}
         
         return json.dumps(jdata)
 

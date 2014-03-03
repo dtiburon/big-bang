@@ -61,6 +61,7 @@ var next_id = 42; // next ID # to be assigned to a brand new feed; feeds loaded 
 var slug = "{{ slug }}";
 var new_planet = {{ new_planet }};
 var planet_name = "";
+var planet_id = 0;
 
 
 $(document).ready(function()
@@ -131,6 +132,8 @@ function load_planet_data(json)
     console.log("Loading planet...");
     planet_name = json['planet_name'];
     planet_desc = json['planet_desc'];
+    planet_id = json['planet_id'];
+    console.log("Planet ID is: " + planet_id)
     // change page title to display planet name
     $('#page-title h1').append(": " + planet_name)
     // populate planet fields with planet data
@@ -189,12 +192,13 @@ function save()
     $.ajax({
             url: "/ws/planet/" + encodeURIComponent('{{ slug }}'),
             type: "POST", 
-            data : JSON.stringify({'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds_to_save}), 
+            data : JSON.stringify({'slug':slug, 'planet_id':planet_id, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds_to_save}), 
             dataType : "json", 
             contentType: "application/json; charset=utf-8", 
             success: function(json)
             {
                 console.log("saved all feeds.");
+                // change page title to display updated planet name
             },
             // todo: fix error handling to integrate with existing Planeteria code
             error: function(xhr, txtStatus, errorThrown) 
