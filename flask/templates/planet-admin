@@ -141,6 +141,11 @@ function load_planet_data(json)
     var feed_list = json['feeds'];
     var num_feeds = $(feed_list).size();
     console.log("Found "+num_feeds+" feeds to load.");
+    // if there are no feeds in the DB, load an empty feed form
+    if (num_feeds == 0){
+        add_feed(next_id);
+    };
+    // iterate over feeds list and populate the page with feed data
     for (i = 0; i < num_feeds; i++) 
     {
         var feed_id = feed_list[i]['id'];
