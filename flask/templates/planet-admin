@@ -57,8 +57,7 @@
 <!--<script type="text/javascript" src="/static/js/jquery.validate.1.11.1.min.js"></script>-->
 <script type="text/javascript">
 
-var highest_feed_id = 0; // this is set in load_data_feed() from json data, updated with each save
-var next_id = highest_feed_id + 1; // next ID # to be assigned to a brand new feed (reset once highest_feed_id is set from json data)
+var next_id = 42; // next ID # to be assigned to a brand new feed; feeds loaded from DB use DB id
 var slug = "{{ slug }}";
 var new_planet = {{ new_planet }};
 var planet_name = "";
@@ -96,14 +95,9 @@ function add_feed(id)
     $("#all-feeds #feed-img").attr("id", "feed-img-" + id);
     $("#all-feeds #feed-img").attr("name", "feed-img-" + id);
 
-    // if id is a new one, increment the global id count:
-    
-    if (id > highest_feed_id)
-    {
-        console.log("highest_feed_id = " + highest_feed_id);
-        next_id++;
-        console.log("added new feed window; next_id is now " + next_id);
-    }
+    // increment the temp id count:
+    next_id++;
+    console.log("added new feed window; next_id is now " + next_id);
 
 }
 
@@ -137,8 +131,6 @@ function load_planet_data(json)
     console.log("Loading planet...");
     planet_name = json['planet_name'];
     planet_desc = json['planet_desc'];
-    highest_feed_id = json['highest_feed_id'];
-    next_id = highest_feed_id + 1;
 
     // populate planet fields with planet data
     $("#planet-name").val(planet_name);
@@ -159,7 +151,6 @@ function load_planet_data(json)
         $("#feed-img-").val(feed_list[i]['image']);
     }
 }
-
 
 function save()
 {
@@ -186,14 +177,12 @@ function save()
         // add each new feed to the list of feeds
         feeds_to_save.push(feed);
     });
-    highest_feed_id = next_id;
-    console.log("highest_feed_id is now reset at " + highest_feed_id)
 
 
     $.ajax({
             url: "/ws/planet/" + encodeURIComponent('{{ slug }}'),
             type: "POST", 
-            data : JSON.stringify({'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds_to_save, 'highest_feed_id':highest_feed_id}), 
+            data : JSON.stringify({'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds_to_save}), 
             dataType : "json", 
             contentType: "application/json; charset=utf-8", 
             success: function(json)
