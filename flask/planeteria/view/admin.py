@@ -2,8 +2,8 @@ import os
 from flask import Flask, render_template, request
 import json
 from werkzeug.exceptions import ServiceUnavailable, BadRequest, InternalServerError
-
-from planeteria import app
+from planeteria.model.planet import Planet
+from planeteria import app, db
 
 # to load any of the pages below, enter Flask ip address as URL + url path indicated in app route.
 # failing to do this will cause a 404 or direct you to the homepage.
@@ -46,9 +46,8 @@ from planeteria import DATA_DIR
 
 @app.route("/ws/planet/<slug>", methods=["POST", "GET"])
 def ws_planet(slug):
-    """Loads and saves feed data.
-    Simply saves data to a file as a temporary measure for testing. 
-    Real database to be added later.
+    """Loads and saves planet & feed data.
+    Transitioning from simple data file to a sqlite database.
     """
     # use request object
 
@@ -56,23 +55,28 @@ def ws_planet(slug):
 
     if request.method == "POST":
         print "Saving"
-        try:
-            datafile = open(os.path.join(DATA_DIR, slug), 'w')
-            datafile.write(request.data)
-            datafile.close()
-        except IOError:
-            raise InternalServerError(description="Failed to save planet feed data.")
 
-        # Although we have saved the data above, Flask requires returning JSON data
+        data = request.json 
+
+        # Assuming for now it's a new planet that doesn't exist in the DB.
+        # Save planet data in Planet table
+        planet = Planet()
+
+        try:
+            planet.slug = data['slug']
+            planet.name = data['planet_name']
+            planet.desc = data['planet_desc']
+
+        except ValueError:
+            raise BadRequest(description="Failed to map planet metadata to database table")
+
+        db.session.add(planet)
+        db.session.commit()
         return json.dumps({})
+
 
     else: #GET
         print "Loading"
-        # test data:
-        # feeds_to_save = [{'id':22, 'url':'http://dtiburon.wordpress.com/feed', 'name':'Aleta Dunne', 'image':'https://dl.dropbox.com/u/6356650/clay_aleta_200x200.jpg'}, {'id':23, 'url':'http://thelittlerobotblogs.wordpress.com/feed/', 'name':'Ana Marian Pedro', 'image':'http://i.imgur.com/xXWG7.jpg'}, {'id':24, 'url':'http://wowsig.in/log/feed/', 'name':'Aakanksha Gaur', 'image':''}]
-        # jdata = {'slug':'wfs', 'feeds':feeds_to_save, 'highest_feed_id':24}
-        # return some json-wrapped info to work with (what you loaded or test data)
-        # return json.dumps(jdata)
 
         try:
             datafile = open(os.path.join(DATA_DIR, slug), 'rbU')
@@ -80,4 +84,5 @@ def ws_planet(slug):
             datafile.close()
         except IOError:
             raise InternalServerError(description="Failed to load planet feed data.")
+            
         return jdata
