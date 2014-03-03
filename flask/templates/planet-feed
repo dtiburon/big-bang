@@ -105,6 +105,7 @@ function load_planet_data(jdata) {
     planet_desc = jdata['planet_desc']
     console.log("Planet name is: " + planet_name)
     console.log("Planet description: " + planet_desc)
+    // populate DOM with planet-specific data
     $('#description').append(planet_desc)
     $('#page-title h1').append(": " + planet_name)
     // load list of feeds from database

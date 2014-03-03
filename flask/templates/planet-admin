@@ -131,7 +131,8 @@ function load_planet_data(json)
     console.log("Loading planet...");
     planet_name = json['planet_name'];
     planet_desc = json['planet_desc'];
-
+    // change page title to display planet name
+    $('#page-title h1').append(": " + planet_name)
     // populate planet fields with planet data
     $("#planet-name").val(planet_name);
     $("#planet-desc").val(planet_desc);
