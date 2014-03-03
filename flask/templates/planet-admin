@@ -159,9 +159,10 @@ function save()
     // todo: confirm password
     console.log("Saving planet data...");
     planet_name = $("#planet-name").val();
-    console.log("Planet name is" + planet_name);
+    console.log("Planet name is " + planet_name);
     planet_desc = $("#planet-desc").val();
-    console.log("Planet description is" + planet_desc);
+    console.log("Planet description is " + planet_desc);
+    console.log("Planet slug is " + slug);
 
     console.log("Saving feeds...");
     var feeds_to_save = [];
