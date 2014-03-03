@@ -78,11 +78,23 @@ def ws_planet(slug):
     else: #GET
         print "Loading"
 
-        try:
-            datafile = open(os.path.join(DATA_DIR, slug), 'rbU')
-            jdata = datafile.read()
-            datafile.close()
-        except IOError:
-            raise InternalServerError(description="Failed to load planet feed data.")
-            
-        return jdata
+        # load planet data:
+        planet = Planet.query.filter_by(slug=slug).first()
+        planet_name = planet.name
+        planet_desc = planet.desc
+        planet_id = planet.id
+
+        # load planet feeds (todo):
+        feeds = []
+
+        # package data for jsonification
+        jdata = {'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds}
+        
+        return json.dumps(jdata)
+
+
+
+
+
+
+
