@@ -1,3 +1,3 @@
-from loadsite import db
+from planeteria import db
 
 db.create_all()
