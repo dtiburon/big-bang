@@ -198,7 +198,11 @@ function save()
             success: function(json)
             {
                 console.log("saved all feeds.");
-                // change page title to display updated planet name
+                // if planet is new, reload page w/ dif. URL
+                if (new_planet > 0) {
+                    window.location.assign("/planet/" + encodeURIComponent('{{ slug }}') + "/admin");
+                }
+
             },
             // todo: fix error handling to integrate with existing Planeteria code
             error: function(xhr, txtStatus, errorThrown) 

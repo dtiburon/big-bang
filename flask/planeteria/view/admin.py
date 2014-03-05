@@ -35,7 +35,7 @@ def admin(slug):
         raise BadRequest(description="Cannot load. Planet name missing.")
 
     # look for arguments in URL to indicate whether it's a new planet (in which case there are no feeds to be loaded)
-    # todo: planet creation form should send user to URL http://planeteria.org/planet/<slug>/admin?new=1
+    # note: planet creation form should send user to URL http://planeteria.org/planet/<slug>/admin?new=1
     new_planet = int(request.args.get('new', "0"))  
     print "Is planet new?", new_planet
 
@@ -59,35 +59,57 @@ def ws_planet(slug):
 
         data = request.json
         planet_id = data['planet_id']
-        if planet_id > 0: # if planet already exists in the DB
-            planet = Planet.query.filter_by(slug=slug).first()
+        print "Planet ID:", planet_id
+        feeds_to_save = data['feeds']
+        to_delete = {}
 
-            db_feeds = Feed.query.filter_by(planet_id=planet_id).all()
-
-        else: # if a new planet that doesn't exist in the DB
+        # load data from database if appropriate
+        if planet_id == 0: # if a new planet that doesn't exist in the DB
             planet = Planet()
-        
-        # Save planet data in Planet table
+
+        else: # if planet already exists in the DB
+ 
+            planet = Planet.query.filter_by(slug=slug).first()
+            # planet_id = planet.id
+            # load planet's feeds from feed table
+            db_feeds = Feed.query.filter_by(planet_id=planet_id).all()
+            
+            # populate checklist with db feed URLS to determine which ones no longer exist in the DOM for later deletion
+            for feed in db_feeds:
+                to_delete[feed.url] = feed
+
+        # Save data in Planet and Feed tables
         try:
+            # save Planet data
             planet.slug = data['slug']
             planet.name = data['planet_name']
             planet.desc = data['planet_desc']
 
-            # Save all feeds. todo: check to see if it's in the DB, only add if it's not there.
-            # todo: delete feeds that are in the DB but not in the data['feeds'] list.
-            feeds_to_save = data['feeds']
-            for fi in feeds_to_save:
-                feed = Feed()
-                feed.name = fi['name']
-                feed.url = fi['url']
-                feed.image = fi['image']
-                feed.planet_id = data['planet_id']
-                db.session.add(feed)
+            # Save all feeds.
+            for feed in feeds_to_save:
+                # check to see if it's in the DB, only add if it's not there.
+                if planet_id != 0:
+                    old = check_dups(feed, db_feeds, to_delete) # returns True if it exists in DB
+                    # check_dups updates any feeds that are dups, removes them from list of feeds to delete from DB
+                else:
+                    old = False
+
+                if not old:
+                    newfeed = Feed()
+                    newfeed.name = feed['name']
+                    newfeed.url = feed['url']
+                    newfeed.image = feed['image']
+                    newfeed.planet = planet
+                    db.session.add(newfeed)
 
         except ValueError:
-            raise BadRequest(description="Failed to map planet metadata to database table")
+            raise BadRequest(description="Failed to map planet data to database table")
 
         db.session.add(planet)
+        for feed in to_delete:
+            print "Deleting %i removed feeds." % (len(to_delete))
+            db.session.delete(to_delete[feed])
+
         db.session.commit()
         return json.dumps({})
 
@@ -101,19 +123,18 @@ def ws_planet(slug):
         planet_desc = planet.desc
         planet_id = planet.id
 
-        # load planet feeds (todo):
-        
+        # load planet feeds:
         db_feeds = Feed.query.filter_by(planet_id=planet_id).all()
-        feeds = []
+
         # build feed list from DB feeds for jsonification
-        for i in db_feeds:
-            feed = {}
-            feed['id'] = i.id
-            feed['url'] = i.url
-            feed['name'] = i.name
-            feed['image'] = i.image
-            feeds.append(feed)
-        print feeds
+        feeds = []
+        for feed in db_feeds:
+            newfeed = {}
+            newfeed['id'] = feed.id
+            newfeed['url'] = feed.url
+            newfeed['name'] = feed.name
+            newfeed['image'] = feed.image
+            feeds.append(newfeed)
 
         # package data for jsonification
         jdata = {'planet_id':planet_id, 'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds}
@@ -121,8 +142,25 @@ def ws_planet(slug):
         return json.dumps(jdata)
 
 
+def check_dups(feed, db_feeds, to_delete):
+# Cross-references feed against a planet's feeds in the database and removes any duplicates
 
+    for oldfeed in db_feeds:
+        if feed['url'] == oldfeed.url:
 
+            # Remove from the list of items to delete.
+            to_delete.pop(feed['url'])
 
+            # Check to see if feed data has been updated by user.  
+            if feed['name'] != oldfeed.name:
+                oldfeed.name = feed['name']
 
+            if feed['url'] != oldfeed.url:
+                oldfeed.url = feed['url']
 
+            print "Updated", feed['url']
+
+            return True
+
+    # if above for loop hasn't found any duplicates:
+    return False
