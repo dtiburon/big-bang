@@ -12,11 +12,10 @@ class Feed(db.Model):
     name = Column(UnicodeText, nullable=False) 
     image = Column(UnicodeText, nullable=True) 
     # refer to corresponding planet
-    planet_id = Column(Integer, ForeignKey('planet.id'), nullable=False) 
-        # samples show the foreign key as plural, such as 'planets.id'
-
+    planet_id = Column(Integer, ForeignKey('planet.id'), nullable=False)
     # Constraint to ensure each url within a planet is unique
-    UniqueConstraint('planet', 'url', name='feed_planet_url_undx')
+    __table_args__ = (UniqueConstraint('planet_id', 'url', name='feed_planet_url_undx'),)
+
 
     query = db.session.query_property()
     def __init__(self, url = u'', name = u'', image = u'', planet_id = 0): 
