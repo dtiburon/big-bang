@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from flask import Flask, render_template, request
 import json
@@ -6,8 +7,6 @@ from planeteria.model.planet import Planet
 from planeteria.model.feed import Feed
 from planeteria import app, db
 
-# to load any of the pages below, enter Flask ip address as URL + url path indicated in app route.
-# failing to do this will cause a 404 or direct you to the homepage.
 @app.route("/")
 def index():
     return render_template('index')
@@ -42,9 +41,6 @@ def admin(slug):
     # render template and pass in any variables to be used in template
     return render_template('planet-admin', slug=slug, new_planet=new_planet) 
 
-# for testing - replace with sqlite database
-from planeteria import DATA_DIR
-
 @app.route("/ws/planet/<slug>", methods=["POST", "GET"])
 def ws_planet(slug):
     """Loads and saves planet & feed data.
@@ -74,43 +70,45 @@ def ws_planet(slug):
             # load planet's feeds from feed table
             db_feeds = Feed.query.filter_by(planet_id=planet_id).all()
             
-            # populate checklist with db feed URLS to determine which ones no longer exist in the DOM for later deletion
+            # create checklist with db feed URLS to determine which ones no longer exist in the DOM for later deletion
             for feed in db_feeds:
                 to_delete[feed.url] = feed
 
-        # Save data in Planet and Feed tables
-        try:
-            # save Planet data
-            planet.slug = data['slug']
-            planet.name = data['planet_name']
-            planet.desc = data['planet_desc']
+        # save Planet data
+        planet.slug = data['slug']
+        planet.name = data['planet_name']
+        planet.desc = data['planet_desc']
 
-            # Save all feeds.
-            for feed in feeds_to_save:
-                # check to see if it's in the DB, only add if it's not there.
-                if planet_id != 0:
-                    old = check_dups(feed, db_feeds, to_delete) # returns True if it exists in DB
-                    # check_dups updates any feeds that are dups, removes them from list of feeds to delete from DB
-                else:
-                    old = False
+        # Save all of the feeds. \ø/
+        for feed in feeds_to_save:
+            # check to see if it's in the DB, only add if it's not there.
+            if planet_id != 0:
+                # ID feeds in DB, update any changed feed data, & remove it from list of feeds to delete.
+                is_new = update_feeds(feed, db_feeds, to_delete) # returns False if it exists in DB
+            else:
+                is_new = True
 
-                if not old:
-                    newfeed = Feed()
-                    newfeed.name = feed['name']
-                    newfeed.url = feed['url']
-                    newfeed.image = feed['image']
-                    newfeed.planet = planet
-                    db.session.add(newfeed)
-
-        except ValueError:
-            raise BadRequest(description="Failed to map planet data to database table")
+            if is_new:
+                newfeed = Feed()
+                newfeed.name = feed['name']
+                newfeed.url = feed['url']
+                newfeed.image = feed['image']
+                newfeed.planet = planet
+                db.session.add(newfeed)
 
         db.session.add(planet)
+
+        print "Deleting %i removed feeds." % (len(to_delete))
         for feed in to_delete:
-            print "Deleting %i removed feeds." % (len(to_delete))
             db.session.delete(to_delete[feed])
 
-        db.session.commit()
+        try:
+            db.session.commit() 
+
+        except IntegrityError:
+            raise BadRequest(description="Planet data does not meet database constraints.")
+
+        # Flask requires that this function return jquery
         return json.dumps({})
 
 
@@ -142,8 +140,8 @@ def ws_planet(slug):
         return json.dumps(jdata)
 
 
-def check_dups(feed, db_feeds, to_delete):
-# Cross-references feed against a planet's feeds in the database and removes any duplicates
+def update_feeds(feed, db_feeds, to_delete):
+# Cross-references feed against a planet's feeds in the database and updates DB as needed
 
     for oldfeed in db_feeds:
         if feed['url'] == oldfeed.url:
@@ -151,7 +149,7 @@ def check_dups(feed, db_feeds, to_delete):
             # Remove from the list of items to delete.
             to_delete.pop(feed['url'])
 
-            # Check to see if feed data has been updated by user.  
+            # Check to see if feed data has been updated by user and if so, update DB.  
             if feed['name'] != oldfeed.name:
                 oldfeed.name = feed['name']
 
@@ -160,7 +158,7 @@ def check_dups(feed, db_feeds, to_delete):
 
             print "Updated", feed['url']
 
-            return True
+            return False
 
-    # if above for loop hasn't found any duplicates:
-    return False
+    # if for loop hasn't found any duplicates:
+    return True

@@ -6,7 +6,6 @@ from sqlalchemy.orm import mapper, relationship, backref
 STATIC_PATH = "/static"
 STATIC_FOLDER = os.path.join("..","static")
 TEMPLATE_FOLDER = os.path.join("..","templates")
-DATA_DIR = "data" # temporary place to store data w/out a database for testing
 
 # create database
 SQLALCHEMY_DATABASE_FILE = 'planeteria.db'
