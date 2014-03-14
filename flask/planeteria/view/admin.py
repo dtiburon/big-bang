@@ -103,8 +103,7 @@ def ws_planet(slug):
             db.session.delete(to_delete[feed])
 
         try:
-            db.session.commit() 
-
+            db.session.commit()
         except IntegrityError:
             raise BadRequest(description="Planet data does not meet database constraints.")
 
@@ -136,7 +135,6 @@ def ws_planet(slug):
 
         # package data for jsonification
         jdata = {'planet_id':planet_id, 'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds}
-        
         return json.dumps(jdata)
 
 
@@ -156,7 +154,10 @@ def update_feeds(feed, db_feeds, to_delete):
             if feed['url'] != oldfeed.url:
                 oldfeed.url = feed['url']
 
-            print "Updated", feed['url']
+            if feed['image'] != oldfeed.image:
+                oldfeed.image = feed['image']
+
+            print "Updated", feed['url'], "ID", oldfeed.id
 
             return False
 
