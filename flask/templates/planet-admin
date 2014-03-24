@@ -1,0 +1,224 @@
+{% extends 'layout-site' %}
+{% block body %}
+            <div class="span8 box"><!-- left column (Feed Management) -->
+                <h3>Edit Planet</h3>
+                <form class="feed-form">
+                    <div class="form-inline">
+                        <p>When finished making changes, be sure to save them: <input type="password" class="input-small" placeholder="Password"> <a class="btn btn-success submit-button" onclick="save()" title="Save all changes">Save</a></p>
+                    </div> <!-- / .form-inline -->
+                    <fieldset>
+                        <label>Planet Name</label>
+                        <input type="text" class="input-xxlarge" id="planet-name" name="planet-name" required>
+                        <span class="help-block">This will be the heading that appears at the top of your Planet</span>
+
+                        <label>Planet Description</label>
+                        <textarea rows="5" class="input-xxlarge" id="planet-desc" name="planet-desc"></textarea>
+                        <span class="help-block">Describe the planet theme/topic and any other relevant information such as IRC channel.</span>
+                    </fieldset>
+                <hr>
+                <h3>Planet Feeds</h3>
+                    <div class="form-inline">                    
+                        <p><a class="btn btn-small btn-success" id="feedbtn-add" onclick='add_feed()'><i class="icon-plus icon-white"></i> Add</a> and <a class="btn btn-small btn-danger" href="#"><i class="icon-white icon-remove"></i> Remove</a> feeds as needed.</p>
+                    </div> <!-- / .form-inline -->
+
+                    <!-- Template for feed box -->
+                    <div style="display: none" id="template-feed-form"><!-- template for form box that adds a single feed -->
+                        <div class="single-feed box" id="feed">
+                            <div class="image-holder span1">
+                                <h1>?</h1>
+                            </div>
+                            <a class="btn btn-mini btn-danger feedbtn-rm" id="rm" title="Remove this feed"><i class="icon-white icon-remove"></i></a>
+                            <fieldset>
+                                <label>Feed Name</label>
+                                <input class="input-large" type="text" id="feed-name" name="feed-name" placeholder="Blog author or title">
+                                <span class="help-block">This will be displayed at the top of the blog's entries and in the list of feeds.</span>
+
+                                <label>Feed URL</label>
+                                <input class="input-large" type="text" id="feed-url" name="feed-url" placeholder="http://blog-url.com/rss.xml">
+
+                                <label>Image URL (optional)</label>
+                                <input type="text" id="feed-img" name="feed-img" placeholder="http://">
+                                <span class="help-block">Image must be 150-250px wide.</span>
+                            </fieldset>
+                        </div> <!-- / .single-feed -->
+                    </div> <!-- / template -->
+
+                    <div id="all-feeds"><!-- added feeds will be inserted in this div -->
+                    </div> <!-- / all feeds wrapper -->
+
+                </form> <!-- / feed form -->
+            </div><!-- / .span8 (planet admin form column) -->
+
+            <div class="span4"><!-- column for donate box -->
+                {% include 'donate' %}
+            </div><!-- / .span3 (donate box column)-->
+
+<script type="text/javascript" src="/static/js/jquery-1.10.2.min.js"></script>
+<!--<script type="text/javascript" src="/static/js/jquery.validate.1.11.1.min.js"></script>-->
+<script type="text/javascript">
+
+var next_id = 42; // next ID # to be assigned to a brand new feed; feeds loaded from DB use DB id
+var slug = "{{ slug }}";
+var new_planet = {{ new_planet }};
+var planet_name = "";
+var planet_id = 0;
+
+
+$(document).ready(function()
+{
+    $( ".feedbtn-rm" ).click(del_feed);
+    // if planet is not new, load planet feed data from database
+    if (new_planet == 0) {
+        load_planet();
+    }
+    else
+    // if there are no feeds to load, load a single-feed box:
+    {
+        add_feed(next_id);
+    }
+    console.log("Ready!");
+});
+
+function add_feed(id)
+{
+    // clone the hidden template and make it visible
+    $("#template-feed-form").children().clone(true).prependTo("#all-feeds");
+    // specify default ID (when onclick is used):
+    if (typeof id === "undefined") {
+        id = next_id;
+    }
+    // add unique feed ID # to each field's id & name: feed-name, feed-url, feed-img
+    $("#all-feeds #feed").attr("id", "feed-" + id);
+    $("#all-feeds #feed-name").attr("id", "feed-name-" + id);
+    $("#all-feeds #feed-name").attr("name", "feed-name-" + id);
+    $("#all-feeds #feed-url").attr("id", "feed-url-" + id);
+    $("#all-feeds #feed-url").attr("name", "feed-url-" + id);
+    $("#all-feeds #feed-img").attr("id", "feed-img-" + id);
+    $("#all-feeds #feed-img").attr("name", "feed-img-" + id);
+
+    // increment the temp id count:
+    next_id++;
+    console.log("added new feed window; next_id is now " + next_id);
+
+}
+
+function del_feed()
+{
+    // todo: store deleted feed info to cross-reference with planet database and delete from existing database.
+    $(this).parent().remove();
+}
+
+function load_planet()
+{
+    // load all existing feeds when the page loads
+    $.ajax({
+            url: "/ws/planet/" + encodeURIComponent('{{ slug }}'),
+            dataType : "json", 
+            success: function(json)
+            {
+                load_planet_data(json);
+                console.log("all feeds loaded from database.");
+            },
+            error: function(xhr, txtStatus, errorThrown) // todo: fix error handling
+            {
+                console.log("Failed to load planet feeds. Status: " + xhr.status);
+            }
+    });
+}
+
+function load_planet_data(json)
+{
+    // set globals from json data
+    console.log("Loading planet...");
+    planet_name = json['planet_name'];
+    planet_desc = json['planet_desc'];
+    planet_id = json['planet_id'];
+    console.log("Planet ID is: " + planet_id)
+    // change page title to display planet name
+    $('#page-title h1').append(": " + planet_name)
+    // populate planet fields with planet data
+    $("#planet-name").val(planet_name);
+    $("#planet-desc").val(planet_desc);
+
+    // prepare variables to populate feed list
+    var feed_list = json['feeds'];
+    var num_feeds = $(feed_list).size();
+    console.log("Found "+num_feeds+" feeds to load.");
+    // if there are no feeds in the DB, load an empty feed form
+    if (num_feeds == 0){
+        add_feed(next_id);
+    };
+    // iterate over feeds list and populate the page with feed data
+    for (i = 0; i < num_feeds; i++) 
+    {
+        var feed_id = feed_list[i]['id'];
+        // add a new .single-feed box div with feed fields using the feed's unique id
+        add_feed(feed_id);
+        // if image file is specified, replace image placeholder with image.
+        var image_url = feed_list[i]['image']
+        if (image_url.length > 0) { // form validation prevents anything > 0 from saving if it's not a URL
+            console.log('$("#feed-" + feed_id).find(".image-holder h1").length: '+$("#feed-" + feed_id).find(".image-holder h1").length);
+            $("#feed-" + feed_id).find(".image-holder h1").after("<img src='"+image_url+"' class='img-rounded'>");
+            $("#feed-" + feed_id).find(".image-holder h1").remove();
+        }
+        // populate feed fields with feed data
+        $("#feed-name-" + feed_id).val(feed_list[i]['name']);
+        $("#feed-url-" + feed_id).val(feed_list[i]['url']);
+        $("#feed-img-" + feed_id).val(feed_list[i]['image']);
+
+    }
+}
+
+function save()
+{
+    // todo: add form validation
+    // todo: confirm password
+    console.log("Saving planet data...");
+    planet_name = $("#planet-name").val();
+    console.log("Planet name is " + planet_name);
+    planet_desc = $("#planet-desc").val();
+    console.log("Planet description is " + planet_desc);
+    console.log("Planet slug is " + slug);
+
+    console.log("Saving feeds...");
+    var feeds_to_save = [];
+    $("#all-feeds").children().each(function(index) {
+        var feed_id = $(this).attr('id');
+        // strip non-numeric characters from feed ID to get the #
+        var id = feed_id.replace(/[^0-9]/g, '');
+        feed = {};
+        feed['id'] = id;
+        feed['url'] = $("#feed-url-" + id).val();
+        feed['name'] = $("#feed-name-" + id).val();
+        feed['image'] = $("#feed-img-" + id).val();
+        console.log(feed);
+        // add each new feed to the list of feeds
+        feeds_to_save.push(feed);
+    });
+
+
+    $.ajax({
+            url: "/ws/planet/" + encodeURIComponent('{{ slug }}'),
+            type: "POST", 
+            data : JSON.stringify({'slug':slug, 'planet_id':planet_id, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds_to_save}), 
+            dataType : "json", 
+            contentType: "application/json; charset=utf-8", 
+            success: function(json)
+            {
+                console.log("saved all feeds.");
+                // if planet is new, reload page w/ dif. URL
+                if (new_planet > 0) {
+                    window.location.assign("/planet/" + encodeURIComponent('{{ slug }}') + "/admin");
+                }
+
+            },
+            // todo: fix error handling
+            error: function(xhr, txtStatus, errorThrown) 
+            {
+                console.log("Failed to save planet feeds. Status: " + xhr.status);
+            }
+    });
+
+}
+</script>
+{% endblock %}

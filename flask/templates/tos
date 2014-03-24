@@ -1,0 +1,37 @@
+{% extends 'info-page' %}
+{% block content %}
+        <h3>Terms of Use</h3>
+            <p>By accessing this site, you agree to the following terms:</p>
+
+            <p>You grant me (James Vasile) a worldwide, perpetual,
+            sublicensable royalty-free license to reprint any content you
+            contribute to this site, in verbatim or modified form, and in any
+            medium.  This doesn't include stuff we pull in via rss and
+            atom.</p>
+
+            <p>This website inevitably collects some data about users, both in
+            server logs and in the content you contribute. I won't share your
+            data with spammers.</p>
+
+            <p>You agree not to rely on this site for anything crucial.  It
+            might disappear or break without notice and I'm making no
+            commitment to maintain it or fix it quickly (or ever).  If you
+            want reliability, talk to me and we'll come up with something that
+            works.</p>
+
+            <p>I store your password as plain, unobfuscated text in my
+            database.  Please do not use a real password on this site.
+            Security ranges from lax to nonexistent.  It's just feeds, and
+            it's not worth the effort of real security.</p>
+
+            <p>If your planet is inactive (i.e. nobody is
+            pulling the feed or viewing the planet page on a regular basis),
+            I'm probably going to delete it to conserve resources.</p>
+
+            <p>The email address you enter is viewable by anybody who comes to
+            your admin page or pulls your feed.  Feel free to lie about your
+            address.</p>
+
+            <p>From time to time, I might add new terms here.  You agree to
+            watch this page for changes and be bound by those new terms.</p>
+{% endblock content %}

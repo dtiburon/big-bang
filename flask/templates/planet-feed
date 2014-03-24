@@ -1,0 +1,122 @@
+{% extends 'layout-site' %}
+{% block body %}
+<!-- END HEADER TEMPLATE, START BODY -->
+            <div class="span9"><!-- Body Text -->
+                <div id="feed">
+                    <div class="entry">
+                        <div class="entrytitle box"><a href="http://blog.gingertech.net/">Silvia Pfeiffer</a> &mdash; <a href="http://blog.gingertech.net/2013/03/09/new-challenges/">New Challenges</a>
+                        </div>
+                        <img src="/static/img/silvia.jpg" class="author-image img-rounded">
+                        <div class="entrycontent">
+                            <p>I finished up at Google last week and am now working at <a href="http://www.nicta.com.au/">NICTA</a>, an Australian ICT research institute.</p><p>My work with Google was exciting and I learned a lot. I like to think that Google also got a lot out of me &#8211; I coded and contributed to some YouTube caption features, I worked on Chrome captions and video controls, and above all I worked on video accessibility for HTML at the W3C.</p><p>I was one of the key authors of the <a href="http://www.w3.org/TR/media-accessibility-reqs/">W3C Media Accessibility Requirements document</a> that we created in the Media Accessibility Task Force of the W3C HTML WG. I then went on to help make video accessibility a reality. We created <a href="http://dev.w3.org/html5/webvtt/">WebVTT</a> and the <a href="http://www.w3.org/TR/html51/embedded-content-0.html#the-track-element">&lt;track&gt; element</a> and applied it to captions, subtitles, chapters (navigation), video descriptions, and metadata. To satisfy the need for synchronisation of video with other media resources such as sign language video or audio descriptions, we got the <a href="http://www.w3.org/TR/html51/embedded-content-0.html#media-controllers">MediaController</a> object and the <a href="http://www.w3.org/TR/html51/embedded-content-0.html#attr-media-mediagroup">@mediagroup</a> attribute.</p><p>I must say it was a most rewarding time. I learned a lot about being productive at Google, collaborate successfully over the distance, about how the WebKit community works, and about the new way of writing W3C standard (which is more like pseudo-code). As one consequence, I am now a co-editor of the W3C HTML spec and it seems I am also about to become <a href="http://lists.w3.org/Archives/Public/public-texttracks/2013Feb/0007.html">the editor of the WebVTT spec</a>.</p><p>At NICTA my new focus of work is <a href="http://www.webrtc.org/">WebRTC</a>. There is both a bit of research and a whole bunch of application development involved. I may even get to do some WebKit development, if we identify any issues with the current implementation. I started a week ago and am already amazed by the amount of work going on in the WebRTC space and the amazing number of open source projects playing around with it. Video conferencing is a new challenge and I look forward to it.</p>
+                        </div>
+                        <div class="entryfooter">
+                            <p>2013-03-09 10:16:26</p>
+                            <p>Tags for this feed: Tag1, Tag2, Tag3, Tag4</p>
+                        </div>
+                    </div>
+                    <div class="entry">
+                        <div class="entrytitle box"><a href="http://blog.lydiapintscher.de/">Lydia Pintscher</a> &mdash; <a href="http://blog.lydiapintscher.de/2013/03/10/akademy-2013-submit-your-talk-proposals-and-requests-for-financial-assistance/">Akademy 2013: submit your talk proposals and requests for financial assistance</a></div>
+                        <div class="entrycontent">
+                            <p><a href="http://akademy.kde.org">Akademy</a> is getting closer and it is time to submit proposals for talks. This is your chance to present your work and ideas to the KDE community in person. The call for papers is <a href="http://akademy2013.kde.org/cfp">here</a>. It has all the details.&#160;I&#8217;m sure there&#8217;s something interesting you could talk about in Bilbao. Don&#8217;t wait! If you have questions or are unsure I&#8217;m happy to help. Just send me an email.</p>
+                            <p><span style="text-decoration: underline;">Important</span>: deadline for submissions is <strong>March 15th, 23:59:59 CEST</strong>. But please do your program committee a favor and don&#8217;t wait until the last minute ;-)</p>
+                            <p>&#160;</p>
+                            <p><a href="http://ev.kde.org">KDE e.V.</a> will once again provide travel and accommodation support to a number of people who need it to be able to attend Akademy. For details about this please see the <a href="http://ev.kde.org/rules/reimbursement_policy.php">reimbursement policy</a>. The board will approve requests in 3 rounds. The budget is limited. You want to be in the first round! The deadlines for requests are:</p>
+                            <ul><li>first round: March 15</li>
+                            <li>second round: April 15</li>
+                            <li>third round: May 15</li>
+                            </ul><p>To post a request please register for Akademy on <a href="http://akademy.kde.org">akademy.kde.org</a>. During the registration process you&#8217;ll be able to indicate it.</p>
+                        </div>
+                        <div class="entryfooter">
+                            <p>2013-03-09 22:55:36</p>
+                            <p>Tags for this feed: Tag1, Tag2, Tag3, Tag4</p>
+                        </div>
+                    </div><!-- / .entry -->
+                </div><!-- / #feed -->
+            </div><!-- / .span9 (left column)-->
+<!-- START SIDEBAR -->
+             <div class="span3"> <!-- right column -->
+                <div class="sidebar box">
+                    <h4>About this Planet</h4>
+                    <div id="description"></div>
+                    <h4>Planet Admin</h4>
+                    To give feedback or request a change, email <a href="admin_email">admin_name</a>. 
+                    <h5><a href="/admin">Admin Interface</a></h5>
+                </div>
+                <div class="sidebar box">
+                    <h4>Copyright</h4>
+                    <p>Posts are copyright their respective authors. Click the blog title of an entry to see that blog's terms for redistribution.</p>
+                </div>
+                <div class="sidebar box">
+                    <h4>Read a Tag</h4>
+                    Click on a tag to view just the feeds with that tag.
+                    <p>tag1 tag2 tag3 tag4 tag5 tag6</p>
+
+                    <h4>Subscribe to this Planet</h4>
+                    <ul class="unstyled">
+                        <li> <a href="http://planeteria.org/wfs/atom.xml" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"> All feeds (Atom)</a></li>
+                        <li> <a href="http://planeteria.org/wfs/opml.xml" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"> All feeds (OPML)</a></li>
+                    </ul>
+
+                    <h4>Feeds in this Planet</h4><!-- todo: generate list of feeds dynamically -->
+                    <ul class="unstyled" id="feedlist">
+                        <li><a href="" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="">Teresa Cho</a></li>
+                    </ul>
+                </div><!-- / #planet-subscriptions -->
+            </div><!-- /.span3 (right column) -->
+<script type="text/javascript" src="/static/js/jquery-1.10.2.min.js"></script>
+<!--<script type="text/javascript" src="/static/js/jquery.validate.1.11.1.min.js"></script>-->
+<script type="text/javascript">
+
+var slug = "{{ slug }}";
+var planet_name = ""
+var planet_desc = ""
+
+$(document).ready(function() 
+{
+    // on pageload: 
+    // 1. Load planet data: Name, description, contact, list of feeds.
+    load_planet(slug);
+
+    // 2. pull database of feed content for each feed in feed list, populate feed display
+});
+
+function load_planet(slug) {
+    console.log("Loading " + slug);
+    $.ajax({
+            url: "/ws/planet/" + encodeURIComponent(slug),
+            dataType : "json", 
+            success: function(jdata)
+            {
+                load_planet_data(jdata);
+                console.log("all feeds loaded from database.");
+            },
+            error: function(xhr, txtStatus, errorThrown) // todo: fix error handling to integrate with existing Planeteria code
+            {
+                console.log("Failed to load planet feeds. Status: " + xhr.status);
+            }
+    });
+}
+
+function load_planet_data(jdata) {
+    console.log("Loading planet data");
+    //jdata = {'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':list_of_feeds}
+    planet_name = jdata['planet_name']
+    planet_desc = jdata['planet_desc']
+    console.log("Planet name is: " + planet_name)
+    console.log("Planet description: " + planet_desc)
+    // populate DOM with planet-specific data
+    $('#description').append(planet_desc)
+    $('#page-title h1').append(": " + planet_name)
+    // load list of feeds from database
+    var feed_list = jdata['feeds'];
+    var num_feeds = $(feed_list).size();
+    console.log("Found "+num_feeds+" feeds in this planet:");
+    for (i = 0; i < num_feeds; i++) {
+        // feed = {'id':21, 'url':'http://dtiburon.wordpress.com/rss', 'name':'Aletas blog', 'image':'http://imgur.com/4738y69'}
+        var blogitem = $('<li><a href="'+feed_list[i]['url']+'"><img src="/static/img/feed-icon-10x10.png"></a> '+feed_list[i]['name']+'</li>')
+        $('#feedlist').append(blogitem)
+    }
+}
+</script>
+{% endblock %}
