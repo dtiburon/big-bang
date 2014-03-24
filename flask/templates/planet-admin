@@ -8,11 +8,11 @@
                     </div> <!-- / .form-inline -->
                     <fieldset>
                         <label>Planet Name</label>
-                        <input type="text" class="span12" id="planet-name" name="planet-name" required>
+                        <input type="text" class="input-xxlarge" id="planet-name" name="planet-name" required>
                         <span class="help-block">This will be the heading that appears at the top of your Planet</span>
 
                         <label>Planet Description</label>
-                        <textarea rows="5" class="span12" id="planet-desc" name="planet-desc"></textarea>
+                        <textarea rows="5" class="input-xxlarge" id="planet-desc" name="planet-desc"></textarea>
                         <span class="help-block">Describe the planet theme/topic and any other relevant information such as IRC channel.</span>
                     </fieldset>
                 <hr>
@@ -24,18 +24,17 @@
                     <!-- Template for feed box -->
                     <div style="display: none" id="template-feed-form"><!-- template for form box that adds a single feed -->
                         <div class="single-feed box" id="feed">
-                            <div class="image-holder">
-                                
-                                <!--<img src="http://i.imgur.com/xXWG7.jpg" class="img-rounded">-->
+                            <div class="image-holder span1">
+                                <h1>?</h1>
                             </div>
                             <a class="btn btn-mini btn-danger feedbtn-rm" id="rm" title="Remove this feed"><i class="icon-white icon-remove"></i></a>
                             <fieldset>
                                 <label>Feed Name</label>
-                                <input type="text" id="feed-name" name="feed-name" placeholder="Blog author or title">
+                                <input class="input-large" type="text" id="feed-name" name="feed-name" placeholder="Blog author or title">
                                 <span class="help-block">This will be displayed at the top of the blog's entries and in the list of feeds.</span>
 
                                 <label>Feed URL</label>
-                                <input type="text" id="feed-url" name="feed-url" placeholder="http://blog-url.com/rss.xml">
+                                <input class="input-large" type="text" id="feed-url" name="feed-url" placeholder="http://blog-url.com/rss.xml">
 
                                 <label>Image URL (optional)</label>
                                 <input type="text" id="feed-img" name="feed-img" placeholder="http://">
@@ -120,7 +119,7 @@ function load_planet()
                 load_planet_data(json);
                 console.log("all feeds loaded from database.");
             },
-            error: function(xhr, txtStatus, errorThrown) // todo: fix error handling to integrate with existing Planeteria code
+            error: function(xhr, txtStatus, errorThrown) // todo: fix error handling
             {
                 console.log("Failed to load planet feeds. Status: " + xhr.status);
             }
@@ -155,10 +154,18 @@ function load_planet_data(json)
         var feed_id = feed_list[i]['id'];
         // add a new .single-feed box div with feed fields using the feed's unique id
         add_feed(feed_id);
+        // if image file is specified, replace image placeholder with image.
+        var image_url = feed_list[i]['image']
+        if (image_url.length > 0) { // form validation prevents anything > 0 from saving if it's not a URL
+            console.log('$("#feed-" + feed_id).find(".image-holder h1").length: '+$("#feed-" + feed_id).find(".image-holder h1").length);
+            $("#feed-" + feed_id).find(".image-holder h1").after("<img src='"+image_url+"' class='img-rounded'>");
+            $("#feed-" + feed_id).find(".image-holder h1").remove();
+        }
         // populate feed fields with feed data
         $("#feed-name-" + feed_id).val(feed_list[i]['name']);
         $("#feed-url-" + feed_id).val(feed_list[i]['url']);
         $("#feed-img-" + feed_id).val(feed_list[i]['image']);
+
     }
 }
 

@@ -136,14 +136,26 @@ footer {
 	padding: 5px;
 }
 
-.feedbtn-rm{
+.feedbtn-rm {
 	float:right;
 }
 
 .image-holder {
 	float: left;
 	margin-right: 10px;
-	background-color: transparent;
+	background-color: #CCCCCC !important;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	min-height: 70px;
+	min-width: 70px;
+}
+
+.image-holder h1 {
+	text-align: center;
+	vertical-align: center;
+	color: #FFF;
+	font-family: 'Times New Roman';
 }
 
 .template-single-feed {
