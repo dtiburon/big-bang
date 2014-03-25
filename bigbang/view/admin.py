@@ -3,9 +3,9 @@ import os
 from flask import Flask, render_template, request
 import json
 from werkzeug.exceptions import ServiceUnavailable, BadRequest, InternalServerError
-from planeteria.model.planet import Planet
-from planeteria.model.feed import Feed
-from planeteria import app, db
+from bigbang.model.planet import Planet
+from bigbang.model.feed import Feed
+from bigbang import app, db
 
 @app.route("/")
 def index():
@@ -34,7 +34,7 @@ def admin(slug):
         raise BadRequest(description="Cannot load. Planet name missing.")
 
     # look for arguments in URL to indicate whether it's a new planet (in which case there are no feeds to be loaded)
-    # note: planet creation form should send user to URL http://planeteria.org/planet/<slug>/admin?new=1
+    # note: planet creation form should send user to URL http://bigbang.org/planet/<slug>/admin?new=1
     new_planet = int(request.args.get('new', "0"))  
     print "Is planet new?", new_planet
 

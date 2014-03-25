@@ -8,7 +8,7 @@ STATIC_FOLDER = os.path.join("..","static")
 TEMPLATE_FOLDER = os.path.join("..","templates")
 
 # create database
-SQLALCHEMY_DATABASE_FILE = 'planeteria.db'
+SQLALCHEMY_DATABASE_FILE = 'bigbang.db'
 
 app = Flask(__name__,
             static_url_path = STATIC_PATH,
@@ -25,4 +25,4 @@ from model.feed import Feed
 
 Planet.feed = relationship(Feed, backref=backref("planet"))
 
-from planeteria.view import admin
+from bigbang.view import admin

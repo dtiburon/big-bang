@@ -1,4 +1,4 @@
-from planeteria import db
+from bigbang import db
 from sqlalchemy import Table, Column, Integer, String, UnicodeText, UniqueConstraint, Text, Index, ForeignKey
 
 class Feed(db.Model): 
