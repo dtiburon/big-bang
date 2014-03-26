@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import json
 from werkzeug.exceptions import ServiceUnavailable, BadRequest, InternalServerError
 from bigbang.model.planet import Planet
@@ -15,9 +15,21 @@ def index():
 def thanks():
     return render_template('thanks')
 
-@app.route("/tos")
-def tos():
-    return render_template('tos')
+@app.route("/new")
+def new():
+    return render_template('newplanet')
+
+@app.route("/directory")
+def directory():
+    return render_template('directory')
+
+@app.route("/planet/new", methods=["POST"])
+def newplanet():
+    slug = request.form['slug']
+    print slug
+    planet_name = request.form['name']
+
+    return redirect(os.path.join('planet', slug, 'admin?new=1'))
 
 @app.route("/planet/<slug>")
 def planet(slug):
