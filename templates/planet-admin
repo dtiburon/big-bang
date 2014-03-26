@@ -49,7 +49,11 @@
                 </form> <!-- / feed form -->
             </div><!-- / .span8 (planet admin form column) -->
 
-            <div class="span4"><!-- column for donate box -->
+            <div class="span4"><!-- column 2 for donate box & other info -->
+                <div class="box" id="about">
+                    <H3>About Your Planet</H3>
+                    <p>Your planet is located at: </p>
+                </div> <!-- / "about your planet" box -->
                 {% include 'donate' %}
             </div><!-- / .span3 (donate box column)-->
 
@@ -68,6 +72,12 @@ $(document).ready(function()
 {
     // if planet is not new, load planet feed data from database
     if (new_planet == 0) {
+
+        // display planet page url in "About" sidebar. !! todo: pass in domain name
+        var planet_url = "http://domainname.com/planet/"+slug
+        $('#about p').append('<a href="'+planet_url+'">'+planet_url+'</a>')
+
+        // load the rest of the planet & feed data from database
         load_planet();
     }
     else
@@ -123,12 +133,17 @@ function load_planet_data(json)
 {
     // set globals from json data
     console.log("Loading planet...");
-    planet_name = json['planet_name'];
-    planet_desc = json['planet_desc'];
-    planet_id = json['planet_id'];
+    var planet_name = json['planet_name'];
+    var planet_desc = json['planet_desc'];
+    var planet_id = json['planet_id'];
     console.log("Planet ID is: " + planet_id)
     // change page title to display planet name
-    $('#page-title h1').append(": " + planet_name)
+    // $('#page-title h1').append(": " + planet_name)
+    var page_header = $('#page-title h1');
+    for(var i in page_header){
+         page_header[i].innerHTML=planet_name;
+    }
+
     // populate planet fields with planet data
     $("#planet-name").val(planet_name);
     $("#planet-desc").val(planet_desc);
