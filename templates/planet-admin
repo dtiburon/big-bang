@@ -66,7 +66,6 @@ var planet_id = 0;
 
 $(document).ready(function()
 {
-    $( ".feedbtn-rm" ).click(del_feed);
     // if planet is not new, load planet feed data from database
     if (new_planet == 0) {
         load_planet();
@@ -100,12 +99,6 @@ function add_feed(id)
     next_id++;
     console.log("added new feed window; next_id is now " + next_id);
 
-}
-
-function del_feed()
-{
-    // todo: store deleted feed info to cross-reference with planet database and delete from existing database.
-    $(this).parent().remove();
 }
 
 function load_planet()
