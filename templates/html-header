@@ -5,5 +5,5 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min-2.2.2.css">
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.min-2.2.2.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/planeteria.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
   </head>

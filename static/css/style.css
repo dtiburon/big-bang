@@ -1,6 +1,5 @@
 body {
-	background: url('../img/bg.gif');
-	background-repeat: repeat-x;
+	background: #FFF;
 }
 
 #header-wrapper {
@@ -33,10 +32,6 @@ body {
 	margin: 5px 5px 5px 0px;
 }
 
-footer {
-	font-size: 0.9em;
-
-}
 /*-----------------------------*/
 /*  Style for boxes site-wide  */
 /*-----------------------------*/
@@ -59,7 +54,7 @@ footer {
 }
 
 .donate {
-	background: #CCFFCC;
+	background: #CEB;
 	font-size: 0.9em;
 	word-wrap: break-word;
 }
