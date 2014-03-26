@@ -6,26 +6,19 @@
   {% include "navbar" %}
   <div class="container-fluid" id="main">
     <div class="row-fluid" id="header-wrapper">
-        <div class="span2">
-          <div id="header-image" class="hidden-phone">
-            <img src="/static/img/planeteria_200.png" width="150px">
-          </div>
+      <div class="span2">
+        <div id="header-image" class="hidden-phone image-holder">
+          <h1>logo?</h1>
         </div>
-        <div class="span10" id="page-title">
-          <h1>Planeteria</h1>
-          <h3>Blog aggregation by your community, for your community.</h3>
-        </div>
+      </div>
+      <div class="span10" id="page-title">
+        <h1>The Big Bang</h1>
+        <h3>Create your own galaxy.</h3>
+      </div>
     </div><!-- /.row for header -->
     <div class="row-fluid"> <!-- start row for page body -->
 {% block body %}{% endblock %}
-    </div><!-- / row for page body-->  
-      <hr>
-
-      <footer>
-        <p>The code for Planeteria is licensed under the terms of the <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">AGPLv3</a>.</p>
-        <p>Individual posts are copyright by their authors and Planeteria claims no exclusive rights to them. Click through the posts to the parent blogs and you should be able to find terms for reproduction.</p>
-        <p><a href="tos.html">Terms of Service</a>
-      </footer>
+    </div><!-- / row for page body-->
   </div> <!-- /container -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min-2.2.2.js"></script>

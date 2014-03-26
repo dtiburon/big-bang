@@ -1,0 +1,11 @@
+{% extends 'layout-site' %}
+{% block body %}
+      <div class="span12">
+        <h2>Planet Directory</h2>
+        <p>These are the planets that live on this site.</p>
+        <ul><!--todo: populate this list dynamically based on Planet db table-->
+          <li>Women in Free Software</li> <!-- include link to the planet -->
+          <li>The Big Bang</li>
+        </ul>
+      </div><!-- / .span12 page body-->
+{% endblock %}
