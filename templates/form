@@ -1,5 +1,4 @@
-<div class="box">
-  <!-- todo: redo form using bootstrap form functionality -->
+<div class="box"><!-- box to frame Planet creation form -->
   <form method="post" action="/planet/new" class="form-horizontal"> 
     <fieldset>
       <legend>Get Started</legend>
@@ -11,12 +10,7 @@
       <span class="help-block">Your planet URL will be http://bigbang.org/slug.
       The slug can only consist of letters and numbers. This can never be changed.</span>
     </fieldset>
-    <!--<input type="submit" name="submit" value="Create Planet" />-->
     <button type="submit" class="btn btn-success">Create Planet</button>
   </form>
 </div><!-- / .box for Planet creation form -->
 
-<!-- Notes for form actions:
-  - Collect form values and pass them to the Planet Admin page to build the feed.
-  - Planet admin page URL should look like this - http://bigbang.org/planet/<slug>/admin?new=1
-  -->
