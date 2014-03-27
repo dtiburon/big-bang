@@ -49,20 +49,25 @@ deployment on your own website.
 
 To install and run the current (unfinished) project for development, first create a virtual environment and activate it. 
 Then install the following packages in a terminal window with pip:
+
     $ pip install SQLAlchemy
     $ pip install Flask-SQLAlchemy
 The Flask-SQLAlchemy package includes Flask and related packages. See the requirements.txt file for all dependencies.
 
 Clone the repository to your local machine:
+
     $ git clone git://github.com/dtiburon/big-bang.git
 
 The first time you load the site, start by creating the database by running create_db.py in the home directory: 
+
     $ python create_db.py
 
 Then launch the server:
+
     $ python server.py
 
 It should display something like:
+
     * Running on http://127.0.0.1:5000/
     * Restarting with reloader
 
