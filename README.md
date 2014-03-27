@@ -41,5 +41,29 @@ deployment on your own website.
 - The HTML and CSS were created using [Bootstrap v2.2.2](http://getbootstrap.com/2.3.2/index.html) - a future project might be to update it to Bootstrap v3 or move to something faster such as the Living Styleguide (volunteers wanted).
 
 ### To be added soon:
+- Feed content pulling functionality (crucial for a planet, I know)
 - Mozilla Persona logins for planet administrators
 - Testing
+
+## Installation
+
+To install and run the current (unfinished) project for development, first create a virtual environment and activate it. 
+Then install the following packages in a terminal window with pip:
+    $ pip install SQLAlchemy
+    $ pip install Flask-SQLAlchemy
+The Flask-SQLAlchemy package includes Flask and related packages. See the requirements.txt file for all dependencies.
+
+Clone the repository to your local machine:
+    $ git clone git://github.com/dtiburon/big-bang.git
+
+The first time you load the site, start by creating the database by running create_db.py in the home directory: 
+    $ python create_db.py
+
+Then launch the server:
+    $ python server.py
+
+It should display something like:
+    * Running on http://127.0.0.1:5000/
+    * Restarting with reloader
+
+Then open a browser window and enter the URL http://127.0.0.1:5000/ - _voila_!  Leave the terminal window open that's running server.py.  When you're done working on/testing/using the site, type ^C into the terminal window.
