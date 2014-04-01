@@ -9,8 +9,11 @@ class Feed(db.Model):
     __tablename__ = 'feed'
     id = Column(Integer, primary_key=True)
     url = Column(UnicodeText, nullable=False)
-    name = Column(UnicodeText, nullable=False) 
+    name = Column(UnicodeText, nullable=False) # given by user - usually blogger/author name
     image = Column(UnicodeText, nullable=True) 
+    etag = Column(UnicodeText, nullable=True) # from feedparser during first pull; sometimes buggy
+    title = Column(UnicodeText, nullable=True) # from feedparser during first pull
+    blogurl = Column(UnicodeText, nullable=True) # from feedparser during first pull
     # refer to corresponding planet
     planet_id = Column(Integer, ForeignKey('planet.id'), nullable=False)
     # Constraint to ensure each url within a planet is unique
@@ -18,13 +21,16 @@ class Feed(db.Model):
 
 
     query = db.session.query_property()
-    def __init__(self, url = u'', name = u'', image = u'', planet_id = 0): 
+    def __init__(self, url = u'', name = u'', image = u'', etag = u'', title = u'', blogurl = u'', planet_id = 0):
         self.url = url
         self.name = name
         self.image = image
+        self.etag = etag
+        self.title = title
+        self.blogurl = blogurl
         self.planet_id = planet_id
 
-    def __str__(self): 
+    def __repr__(self): 
     # print string for the object
         return "<Feed('%s','%s','%s')>" % (self.id, self.name, self.url)
 
