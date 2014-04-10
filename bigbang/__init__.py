@@ -22,7 +22,9 @@ db = SQLAlchemy(app)
 
 from model.planet import Planet
 from model.feed import Feed
+from model.feed_content import FeedContent
 
 Planet.feed = relationship(Feed, backref=backref("planet"))
+Feed.feed_content = relationship(FeedContent, backref=backref("feed"))
 
 from bigbang.view import admin

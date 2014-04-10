@@ -20,14 +20,13 @@ class FeedContent(db.Model):
     # Constraint to ensure each entry within a feed is unique??
 
     query = db.session.query_property()
-    def __init__(self, url = u'', title = u'', body = u'', date = u'', author = u'', feed_id = 0):
+    def __init__(self, url = u'', title = u'', body = u'', date = u'', author = u''):
         # list all columns once they're determined
         self.url = url
         self.title = title
         self.body = body
         self.date = date
         self.author = author
-        self.feed_id = feed_id
 
     def __repr__(self): 
     # print string for the object
