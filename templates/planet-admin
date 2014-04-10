@@ -67,7 +67,6 @@ var new_planet = {{ new_planet }};
 var planet_name = "";
 var planet_id = 0;
 
-
 $(document).ready(function()
 {
     // if planet is not new, load planet feed data from database
@@ -126,6 +125,7 @@ function load_planet()
             {
                 console.log("Failed to load planet feeds. Status: " + xhr.status);
             }
+            // add handling of error, thrown when someone loads the URL of a planet that doesn't exist. (view/admin.py 133)
     });
 }
 
@@ -133,9 +133,9 @@ function load_planet_data(json)
 {
     // set globals from json data
     console.log("Loading planet...");
-    var planet_name = json['planet_name'];
-    var planet_desc = json['planet_desc'];
-    var planet_id = json['planet_id'];
+    planet_name = json['planet_name'];
+    planet_desc = json['planet_desc'];
+    planet_id = json['planet_id'];
     console.log("Planet ID is: " + planet_id)
     // change page title to display planet name
     // $('#page-title h1').append(": " + planet_name)
@@ -182,6 +182,7 @@ function save()
     // todo: add form validation
     // todo: confirm password
     console.log("Saving planet data...");
+    console.log("Planet ID:" + planet_id);
     planet_name = $("#planet-name").val();
     console.log("Planet name is " + planet_name);
     planet_desc = $("#planet-desc").val();
