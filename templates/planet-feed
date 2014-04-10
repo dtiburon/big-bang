@@ -78,7 +78,7 @@ $(document).ready(function()
     // 1. Load planet data: Name, description, contact, list of feeds.
     load_planet(slug);
 
-    // 2. pull database of feed content for each feed in feed list, populate feed display
+    // 2. (todo) pull database of feed content for each feed in feed list, populate feed display
 });
 
 function load_planet(slug) {
