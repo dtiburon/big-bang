@@ -2,7 +2,8 @@
 import os
 from flask import Flask, render_template, request, redirect
 import json
-from werkzeug.exceptions import ServiceUnavailable, BadRequest, InternalServerError
+from werkzeug.exceptions import ServiceUnavailable, BadRequest, InternalServerError, NotFound
+from sqlalchemy.exc import IntegrityError
 from bigbang.model.planet import Planet
 from bigbang.model.feed import Feed
 from bigbang import app, db
@@ -76,7 +77,7 @@ def ws_planet(slug):
             planet = Planet()
 
         else: # if planet already exists in the DB
- 
+
             planet = Planet.query.filter_by(slug=slug).first()
             # planet_id = planet.id
             # load planet's feeds from feed table
@@ -128,7 +129,11 @@ def ws_planet(slug):
 
         # load planet data:
         planet = Planet.query.filter_by(slug=slug).first()
-        planet_name = planet.name
+        try:
+            planet_name = planet.name
+        except AttributeError:
+            print "No planet found with slug %s. Please check the URL and try again." % (slug)
+            raise NotFound
         planet_desc = planet.desc
         planet_id = planet.id
 
