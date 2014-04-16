@@ -8,6 +8,7 @@ from bigbang.model.planet import Planet
 from bigbang.model.feed import Feed
 from bigbang.model.feed_content import FeedContent
 from bigbang import app, db
+import datetime, time
 
 @app.route("/")
 def index():
@@ -136,31 +137,46 @@ def ws_planet(slug):
         planet_desc = planet.desc
         planet_id = planet.id
 
-        # load planet feeds:
-        db_feeds = Feed.query.filter_by(planet_id=planet_id).all()
+        # Database query pulls all entries from a planet's feeds at once, and sorts them by entry date, with the most recent last.
+        planet_feeds = db.session.query("feed_id", "name", "feed_url", "image", "entry_id", "author", "entry_title", "entry_url", "entry_date", "body") \
+                        .from_statement("SELECT feed.id AS feed_id, name, feed.url AS feed_url, image, feed_content.id AS entry_id, author, feed_content.title AS entry_title, feed_content.url AS entry_url, date AS entry_date, body from feed, feed_content where feed_id=feed.id and planet_id=:d order by date;") \
+                        .params(d=planet_id).all()
 
-        # build feed list from DB feeds for jsonification
-        feeds = []
+        # build entry list from DB feeds for jsonification
         entries = []
-        for feed in db_feeds:
-            newfeed = {}
-            newfeed['id'] = feed.id
-            newfeed['url'] = feed.url
-            newfeed['name'] = feed.name
-            newfeed['image'] = feed.image
-            feeds.append(newfeed)
+        feeds = []
+        print planet_feeds[1]
+        print
 
-            # load entries associated with this feed:
-            db_entries = FeedContent.query.filter_by(feed_id=feed.id).all()
-            for entry in db_entries:
-                newentry = {}
-                newentry['url'] = entry.url
-                newentry['body'] = entry.body
-                newentry['title'] = entry.title
-                newentry['date'] = entry.date
-                newentry['author'] = entry.author
-                newentry['id'] = entry.id
-                entries.append(newentry)
+        unique_feeds = []
+
+        # parse entry data - each entry = 1 dictionary
+        for entry in planet_feeds:
+            newentry = {}
+            newentry['feed_id'] = entry[0]
+            newentry['name'] = entry[1]
+            newentry['feed_url'] = entry[2]
+            newentry['image'] = entry[3]
+            newentry['id'] = entry[4]
+            newentry['author'] = entry[5]
+            newentry['title'] = entry[6]
+            newentry['entry_url'] = entry[7]
+            newentry['date'] = entry[8] # todo: change epoch date to human-friendly string 
+            newentry['content'] = entry[9]
+            print "New entry:", newentry
+            entries.append(newentry)
+
+            # save only unique feeds for admin page display
+            if not entry[2] in unique_feeds:
+                print "Saving new unique feed:", entry[2]
+                unique_feeds.append(entry[2])
+                newfeed = {}
+                newfeed['id'] = entry[0]
+                newfeed['name'] = entry[1]
+                newfeed['url'] = entry[2]
+                newfeed['image'] = entry[3]
+                feeds.append(newfeed)
+        print "Final feeds list:", feeds
 
         # package data for jsonification
         jdata = {'planet_id':planet_id, 'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds, 'entries':entries}

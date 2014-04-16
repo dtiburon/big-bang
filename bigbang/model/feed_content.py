@@ -11,7 +11,7 @@ class FeedContent(db.Model):
     title = Column(UnicodeText, nullable=False)
     url = Column(UnicodeText, nullable=False)
     body = Column(UnicodeText, nullable=False)
-    date = Column(UnicodeText, nullable=False) # Feedparser normalizes date format to a string in GMT...
+    date = Column(Integer, nullable=False) # epoch
     author = Column(UnicodeText, nullable=True)
     # refer to corresponding feed
     feed_id = Column(Integer, ForeignKey('feed.id'), nullable=False)

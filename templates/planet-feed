@@ -116,20 +116,21 @@ function add_entry(entry)
     // add unique feed ID # to DOM so it won't be identified in the next loop
     $("#all-entries #entry").attr("id", "entry-" + id);
 
-    // (todo) populate entry with entry data
-    // # entry = {'url':url, 'body':body, 'title':title, 'date':date, 'author':author, 'id':id}
-    var url = entry.url
+    // populate entry with entry data
+    // # entry = {'url':url, 'body':body, 'title':title, 'date':date, 'author':author, 'id':id, 'image':image}
+    var entry_url = entry.entry_url
     var title = entry.title
     var date = entry.date
     var author = entry.author
-    var content = entry.body
+    var content = entry.content
 
     // create title with link to entry
-    var titlelink = "<a href='" + url + "'>" + title + "</a target='_blank'>"
+    var titlelink = "<a href='" + entry_url + "'>" + title + "</a target='_blank'>"
     $('#entry-' + id).find('.entrytitle').append(titlelink);
     $('#entry-' + id).find('.entrycontent').append(content);
     $('#entry-' + id).find('.entryfooter').append(date);
 
+    // todo: add image from feed data
 
 
 }

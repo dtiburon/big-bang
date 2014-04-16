@@ -8,7 +8,7 @@ from bigbang.model.planet import Planet
 from bigbang.model.feed import Feed
 from bigbang.model.feed_content import FeedContent
 from bigbang import app, db
-import feedparser
+import feedparser, datetime, time
 
 # pull planets from database
 all_planets = Planet.query.all()
@@ -119,10 +119,14 @@ def update_planet(planet_id):
                     new_entry.url = entry_url
                     print "Entry title:", new_entry.title
                     try:
-                        new_entry.date = feed.entries[i].published
+                        parsed_date = feed.entries[i].published_parsed
                     except (AttributeError): 
-                        new_entry.date = feed.entries[i].updated
-                    print "Entry date:", new_entry.date
+                        parsed_date = feed.entries[i].updated_parsed
+                    print "Parsed date type:", type(parsed_date)
+                    epoch_date = int(time.mktime(parsed_date))
+                    print "Date to epoch:", epoch_date
+                    new_entry.date = epoch_date
+                    
                     
                     # Find the content in the parsed feed! It's in a different place for different feeds. Let the games begin.
                     content = u''
