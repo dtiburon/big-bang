@@ -2,37 +2,21 @@
 {% block body %}
 <!-- END HEADER TEMPLATE, START BODY -->
             <div class="span9"><!-- Body Text -->
-                <div id="feed">
-                    <div class="entry">
-                        <div class="entrytitle box"><a href="http://blog.gingertech.net/">Silvia Pfeiffer</a> &mdash; <a href="http://blog.gingertech.net/2013/03/09/new-challenges/">New Challenges</a>
+                <!-- Template for single entry; hidden -->
+                <div style="display: none" id="template-entry"><!-- template for a single entry -->
+                    <div class="entry" id="entry">
+                        <div class="entrytitle box">
                         </div>
-                        <img src="/static/img/silvia.jpg" class="author-image img-rounded">
                         <div class="entrycontent">
-                            <p>I finished up at Google last week and am now working at <a href="http://www.nicta.com.au/">NICTA</a>, an Australian ICT research institute.</p><p>My work with Google was exciting and I learned a lot. I like to think that Google also got a lot out of me &#8211; I coded and contributed to some YouTube caption features, I worked on Chrome captions and video controls, and above all I worked on video accessibility for HTML at the W3C.</p><p>I was one of the key authors of the <a href="http://www.w3.org/TR/media-accessibility-reqs/">W3C Media Accessibility Requirements document</a> that we created in the Media Accessibility Task Force of the W3C HTML WG. I then went on to help make video accessibility a reality. We created <a href="http://dev.w3.org/html5/webvtt/">WebVTT</a> and the <a href="http://www.w3.org/TR/html51/embedded-content-0.html#the-track-element">&lt;track&gt; element</a> and applied it to captions, subtitles, chapters (navigation), video descriptions, and metadata. To satisfy the need for synchronisation of video with other media resources such as sign language video or audio descriptions, we got the <a href="http://www.w3.org/TR/html51/embedded-content-0.html#media-controllers">MediaController</a> object and the <a href="http://www.w3.org/TR/html51/embedded-content-0.html#attr-media-mediagroup">@mediagroup</a> attribute.</p><p>I must say it was a most rewarding time. I learned a lot about being productive at Google, collaborate successfully over the distance, about how the WebKit community works, and about the new way of writing W3C standard (which is more like pseudo-code). As one consequence, I am now a co-editor of the W3C HTML spec and it seems I am also about to become <a href="http://lists.w3.org/Archives/Public/public-texttracks/2013Feb/0007.html">the editor of the WebVTT spec</a>.</p><p>At NICTA my new focus of work is <a href="http://www.webrtc.org/">WebRTC</a>. There is both a bit of research and a whole bunch of application development involved. I may even get to do some WebKit development, if we identify any issues with the current implementation. I started a week ago and am already amazed by the amount of work going on in the WebRTC space and the amazing number of open source projects playing around with it. Video conferencing is a new challenge and I look forward to it.</p>
                         </div>
                         <div class="entryfooter">
-                            <p>2013-03-09 10:16:26</p>
-                            <p>Tags for this feed: Tag1, Tag2, Tag3, Tag4</p>
                         </div>
-                    </div>
-                    <div class="entry">
-                        <div class="entrytitle box"><a href="http://blog.lydiapintscher.de/">Lydia Pintscher</a> &mdash; <a href="http://blog.lydiapintscher.de/2013/03/10/akademy-2013-submit-your-talk-proposals-and-requests-for-financial-assistance/">Akademy 2013: submit your talk proposals and requests for financial assistance</a></div>
-                        <div class="entrycontent">
-                            <p><a href="http://akademy.kde.org">Akademy</a> is getting closer and it is time to submit proposals for talks. This is your chance to present your work and ideas to the KDE community in person. The call for papers is <a href="http://akademy2013.kde.org/cfp">here</a>. It has all the details.&#160;I&#8217;m sure there&#8217;s something interesting you could talk about in Bilbao. Don&#8217;t wait! If you have questions or are unsure I&#8217;m happy to help. Just send me an email.</p>
-                            <p><span style="text-decoration: underline;">Important</span>: deadline for submissions is <strong>March 15th, 23:59:59 CEST</strong>. But please do your program committee a favor and don&#8217;t wait until the last minute ;-)</p>
-                            <p>&#160;</p>
-                            <p><a href="http://ev.kde.org">KDE e.V.</a> will once again provide travel and accommodation support to a number of people who need it to be able to attend Akademy. For details about this please see the <a href="http://ev.kde.org/rules/reimbursement_policy.php">reimbursement policy</a>. The board will approve requests in 3 rounds. The budget is limited. You want to be in the first round! The deadlines for requests are:</p>
-                            <ul><li>first round: March 15</li>
-                            <li>second round: April 15</li>
-                            <li>third round: May 15</li>
-                            </ul><p>To post a request please register for Akademy on <a href="http://akademy.kde.org">akademy.kde.org</a>. During the registration process you&#8217;ll be able to indicate it.</p>
-                        </div>
-                        <div class="entryfooter">
-                            <p>2013-03-09 22:55:36</p>
-                            <p>Tags for this feed: Tag1, Tag2, Tag3, Tag4</p>
-                        </div>
-                    </div><!-- / .entry -->
-                </div><!-- / #feed -->
+                    </div> <!-- /.entry -->
+                </div><!-- / template -->
+
+                <div id="all-entries">
+                </div> <!-- / #all-entries -->
+
             </div><!-- / .span9 (left column)-->
 <!-- START SIDEBAR -->
              <div class="span3"> <!-- right column -->
@@ -48,10 +32,6 @@
                     <p>Posts are copyright their respective authors. Click the blog title of an entry to see that blog's terms for redistribution.</p>
                 </div>
                 <div class="sidebar box">
-                    <h4>Read a Tag</h4>
-                    Click on a tag to view just the feeds with that tag.
-                    <p>tag1 tag2 tag3 tag4 tag5 tag6</p>
-
                     <h4>Subscribe to this Planet</h4>
                     <ul class="unstyled">
                         <li> <a href="http://planeteria.org/wfs/atom.xml" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"> All feeds (Atom)</a></li>
@@ -76,9 +56,9 @@ $(document).ready(function()
 {
     // on pageload: 
     // 1. Load planet data: Name, description, contact, list of feeds.
+    // 2. (in progress) pull database of feed content for each feed in feed list, populate feed display
     load_planet(slug);
 
-    // 2. (todo) pull database of feed content for each feed in feed list, populate feed display
 });
 
 function load_planet(slug) {
@@ -100,23 +80,58 @@ function load_planet(slug) {
 
 function load_planet_data(jdata) {
     console.log("Loading planet data");
-    //jdata = {'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':list_of_feeds}
+    //jdata = {'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':list_of_feeds, 'entries':list_of_entries}
     planet_name = jdata['planet_name']
     planet_desc = jdata['planet_desc']
-    console.log("Planet name is: " + planet_name)
-    console.log("Planet description: " + planet_desc)
+    console.log("Planet name is: " + planet_name);
+    console.log("Planet description: " + planet_desc);
     // populate DOM with planet-specific data
-    $('#description').append(planet_desc)
-    $('#page-title h1').append(": " + planet_name)
+    $('#description').append(planet_desc);
+    $('#page-title h1').append(": " + planet_name);
     // load list of feeds from database
     var feed_list = jdata['feeds'];
     var num_feeds = $(feed_list).size();
-    console.log("Found "+num_feeds+" feeds in this planet:");
+    console.log("Found "+num_feeds+" feeds in this planet.");
     for (i = 0; i < num_feeds; i++) {
-        // feed = {'id':21, 'url':'http://dtiburon.wordpress.com/rss', 'name':'Aletas blog', 'image':'http://imgur.com/4738y69'}
+        // # feed = {'id':21, 'url':'http://dtiburon.wordpress.com/rss', 'name':'Aletas blog', 'image':'http://imgur.com/4738y69'}
         var blogitem = $('<li><a href="'+feed_list[i]['url']+'"><img src="/static/img/feed-icon-10x10.png"></a> '+feed_list[i]['name']+'</li>')
         $('#feedlist').append(blogitem)
     }
+    // load list of entries from database
+    var entry_list = jdata['entries'];
+    var num_entries = $(entry_list).size();
+    for (i = 0; i < num_entries; i++) {
+        add_entry(entry_list[i]);
+
+    }
+}
+
+function add_entry(entry)
+{
+    // clone the hidden template and make it visible
+    $("#template-entry").children().clone(true).prependTo("#all-entries");
+    // set ID to include in entry DOM somewhere for debugging
+    var id = entry.id;
+    console.log("Entry ID: " + id);
+    // add unique feed ID # to DOM so it won't be identified in the next loop
+    $("#all-entries #entry").attr("id", "entry-" + id);
+
+    // (todo) populate entry with entry data
+    // # entry = {'url':url, 'body':body, 'title':title, 'date':date, 'author':author, 'id':id}
+    var url = entry.url
+    var title = entry.title
+    var date = entry.date
+    var author = entry.author
+    var content = entry.body
+
+    // create title with link to entry
+    var titlelink = "<a href='" + url + "'>" + title + "</a target='_blank'>"
+    $('#entry-' + id).find('.entrytitle').append(titlelink);
+    $('#entry-' + id).find('.entrycontent').append(content);
+    $('#entry-' + id).find('.entryfooter').append(date);
+
+
+
 }
 </script>
 {% endblock %}

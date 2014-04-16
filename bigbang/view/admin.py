@@ -6,6 +6,7 @@ from werkzeug.exceptions import ServiceUnavailable, BadRequest, InternalServerEr
 from sqlalchemy.exc import IntegrityError
 from bigbang.model.planet import Planet
 from bigbang.model.feed import Feed
+from bigbang.model.feed_content import FeedContent
 from bigbang import app, db
 
 @app.route("/")
@@ -57,9 +58,7 @@ def admin(slug):
 @app.route("/ws/planet/<slug>", methods=["POST", "GET"])
 def ws_planet(slug):
     """Loads and saves planet & feed data.
-    Transitioning from simple data file to a sqlite database.
     """
-    # use request object
 
     print "load/save" # to verify function is triggered
 
@@ -120,7 +119,7 @@ def ws_planet(slug):
         except IntegrityError:
             raise BadRequest(description="Planet data does not meet database constraints.")
 
-        # Flask requires that this function return jquery
+        # Flask requires that this function return json but it's not used
         return json.dumps({})
 
 
@@ -142,6 +141,7 @@ def ws_planet(slug):
 
         # build feed list from DB feeds for jsonification
         feeds = []
+        entries = []
         for feed in db_feeds:
             newfeed = {}
             newfeed['id'] = feed.id
@@ -150,8 +150,20 @@ def ws_planet(slug):
             newfeed['image'] = feed.image
             feeds.append(newfeed)
 
+            # load entries associated with this feed:
+            db_entries = FeedContent.query.filter_by(feed_id=feed.id).all()
+            for entry in db_entries:
+                newentry = {}
+                newentry['url'] = entry.url
+                newentry['body'] = entry.body
+                newentry['title'] = entry.title
+                newentry['date'] = entry.date
+                newentry['author'] = entry.author
+                newentry['id'] = entry.id
+                entries.append(newentry)
+
         # package data for jsonification
-        jdata = {'planet_id':planet_id, 'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds}
+        jdata = {'planet_id':planet_id, 'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':feeds, 'entries':entries}
         return json.dumps(jdata)
 
 
