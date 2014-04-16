@@ -161,7 +161,10 @@ def ws_planet(slug):
             newentry['author'] = entry[5]
             newentry['title'] = entry[6]
             newentry['entry_url'] = entry[7]
-            newentry['date'] = entry[8] # todo: change epoch date to human-friendly string 
+            # change date format from epoch to human-friendly string 
+            date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(entry[8]))
+            newentry['date'] = date
+            
             newentry['content'] = entry[9]
             print "New entry:", newentry
             entries.append(newentry)
