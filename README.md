@@ -47,11 +47,12 @@ deployment on your own website.
 
 ## Installation
 
-To install and run the current (unfinished) project for development, first create a virtual environment and activate it. 
+To install and run the current (unfinished) project for development requires sqlite3 installed as well as the following dependencies.  We highly recommend that you first create a virtual environment and activate it.
 Then install the following packages in a terminal window with pip:
 
     $ pip install SQLAlchemy
     $ pip install Flask-SQLAlchemy
+    $ pip install feedparser
 The Flask-SQLAlchemy package includes Flask and related packages. See the requirements.txt file for all dependencies.
 
 Clone the repository to your local machine:
