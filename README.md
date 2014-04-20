@@ -41,9 +41,9 @@ deployment on your own website.
 - The HTML and CSS were created using [Bootstrap v2.2.2](http://getbootstrap.com/2.3.2/index.html) - a future project might be to update it to Bootstrap v3 or move to something faster such as the Living Styleguide (volunteers wanted).
 
 ### To be added soon:
-- Feed content pulling functionality (crucial for a planet, I know)
 - Mozilla Persona logins for planet administrators
 - Testing
+- A pretty design; the current bootstrap design is a placeholder
 
 ## Installation
 
@@ -72,4 +72,13 @@ It should display something like:
     * Running on http://127.0.0.1:5000/
     * Restarting with reloader
 
-Then open a browser window and enter the URL http://127.0.0.1:5000/ - _voila_!  Leave the terminal window open that's running server.py.  When you're done working on/testing/using the site, type ^C into the terminal window.
+Then open a browser window and enter the URL http://127.0.0.1:5000/ - _voila_!  Leave the terminal window open that's running server.py.
+In the browser, you can then follow the instructions to create a planet, add feeds to it, and save (currently no password is required). 
+
+Pulling feed content: in another terminal window, once you have added new feeds to a planet, run spider.py to pull the feed data (right now it needs to be done manually; that will be fixed soon):
+
+    $ python spider.py
+
+Then go to your planet's feed page to view the content at /planet/<<slug>>.
+
+When you're done working on/testing/using the site, type ^C into the terminal window running server.py.
