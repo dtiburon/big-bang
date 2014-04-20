@@ -79,6 +79,6 @@ Pulling feed content: in another terminal window, once you have added new feeds 
 
     $ python spider.py
 
-Then go to your planet's feed page to view the content at /planet/<<slug>>.
+Then go to your planet's feed page to view the content at /planet/slug.
 
 When you're done working on/testing/using the site, type ^C into the terminal window running server.py.
