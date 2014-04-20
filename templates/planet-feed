@@ -90,11 +90,12 @@ function load_planet_data(jdata) {
     $('#page-title h1').append(": " + planet_name);
     // load list of feeds from database
     var feed_list = jdata['feeds'];
+    console.log(jdata['feeds']);
     var num_feeds = $(feed_list).size();
     console.log("Found "+num_feeds+" feeds in this planet.");
     for (i = 0; i < num_feeds; i++) {
-        // # feed = {'id':21, 'url':'http://dtiburon.wordpress.com/rss', 'name':'Aletas blog', 'image':'http://imgur.com/4738y69'}
-        var blogitem = $('<li><a href="'+feed_list[i]['url']+'"><img src="/static/img/feed-icon-10x10.png"></a> '+feed_list[i]['name']+'</li>')
+        // # feed = {'id':21, 'feed_url':'http://dtiburon.wordpress.com/rss', 'name':'Aletas blog', 'image':'http://imgur.com/4738y69'}
+        var blogitem = $('<li><a href="'+feed_list[i]['feed_url']+'"><img src="/static/img/feed-icon-10x10.png"></a> '+feed_list[i]['name']+'</li>')
         $('#feedlist').append(blogitem)
     }
     // load list of entries from database
@@ -117,10 +118,11 @@ function add_entry(entry)
     $("#all-entries #entry").attr("id", "entry-" + id);
 
     // populate entry with entry data
-    // # entry = {'url':url, 'body':body, 'title':title, 'date':date, 'author':author, 'id':id, 'image':image}
+    // # entry = {'feed_id':int(*), 'name':u'*', 'feed_url':u'*', 'image':u'*', 'entry_id':int(*), 'body':u'*', 'title':u'*', 'date':u'*', 'author':u'*', 'entry_url':u'*'}
     var entry_url = entry.entry_url
     var title = entry.title
     var date = entry.date
+    var name = entry.name
     var author = entry.author
     var content = entry.content
 
