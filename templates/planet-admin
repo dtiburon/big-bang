@@ -52,7 +52,7 @@
             <div class="span4"><!-- column 2 for donate box & other info -->
                 <div class="box" id="about">
                     <H3>About Your Planet</H3>
-                    <p>Your planet is located at: </p>
+                    <p>Visit your planet: </p>
                 </div> <!-- / "about your planet" box -->
                 {% include 'donate' %}
             </div><!-- / .span3 (donate box column)-->
@@ -62,9 +62,10 @@
 <script type="text/javascript">
 
 var next_id = 42; // next ID # to be assigned to a brand new feed; feeds loaded from DB use DB id
+var site_url = "{{ site_url }}"
 var slug = "{{ slug }}";
 var new_planet = {{ new_planet }};
-var planet_name = "";
+var planet_name = "{{ planet_name }}";
 var planet_id = 0;
 
 $(document).ready(function()
@@ -73,7 +74,7 @@ $(document).ready(function()
     if (new_planet == 0) {
 
         // display planet page url in "About" sidebar. !! todo: pass in domain name
-        var planet_url = "http://domainname.com/planet/"+slug
+        var planet_url = site_url + "/planet/" + slug
         $('#about p').append('<a href="'+planet_url+'">'+planet_url+'</a>')
 
         // load the rest of the planet & feed data from database

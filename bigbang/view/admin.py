@@ -39,7 +39,8 @@ def planet(slug):
     if not slug:
         raise BadRequest(description="Cannot load. Planet name missing.")
     else:
-        return render_template('planet-feed', slug=slug)
+        planet = Planet.query.filter_by(slug=slug).first()
+        return render_template('planet-feed', slug=slug, planet_name=planet.name)
 
 @app.route("/planet/<slug>/admin")
 def admin(slug):
@@ -49,9 +50,15 @@ def admin(slug):
     # note: planet creation form should send user to URL http://bigbang.org/planet/<slug>/admin?new=1
     new_planet = int(request.args.get('new', "0"))  
     print "Is planet new?", new_planet
-
-    # render template and pass in any variables to be used in template
-    return render_template('planet-admin', slug=slug, new_planet=new_planet)
+    site_url = "http://" + app.config['SITE_DOMAIN']
+    print site_url
+    if not new_planet:
+        planet = Planet.query.filter_by(slug=slug).first()
+        planet_name = planet.name
+    else:
+        planet_name = ""
+    # render template and pass in any variables to be used in jinja template
+    return render_template('planet-admin', slug=slug, new_planet=new_planet, planet_name=planet_name, site_url=site_url)
 
 @app.route("/ws/planet/<slug>", methods=["GET"])
 def ws_planet_view(slug):
@@ -72,28 +79,41 @@ def ws_planet_view(slug):
                     .from_statement("SELECT feed.id AS feed_id, name, feed.url AS feed_url, image, feed_content.id AS entry_id, author, feed_content.title AS entry_title, feed_content.url AS entry_url, date AS entry_date, body from feed, feed_content where feed_id=feed.id and planet_id=:d order by date;") \
                     .params(d=planet_id).all()
 
-    entries = []
-
     # parse entry data. each entry = 1 dictionary
+    entries = []
+    feeds = []
     for entry in planet_feeds:
+        
+        # add only entries with unique feed URL's to the list(feeds)
+        newfeed = {}
+        newfeed['feed_id'] = entry[0]
+        newfeed['name'] = entry[1]
+        newfeed['feed_url'] = entry[2]
+        newfeed['image'] = entry[3]
+        if not newfeed in feeds:
+            feeds.append(newfeed)
+            print "added feed %s to the feeds list" % entry[1]
+
         newentry = {}
         newentry['feed_id'] = entry[0]
         newentry['name'] = entry[1]
         newentry['feed_url'] = entry[2]
         newentry['image'] = entry[3]
-        newentry['id'] = entry[4]
+        newentry['entry_id'] = entry[4]
         newentry['author'] = entry[5]
         newentry['title'] = entry[6]
         newentry['entry_url'] = entry[7]
+
         # change date format from epoch to human-friendly string 
         date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(entry[8]))
         newentry['date'] = date        
         newentry['content'] = entry[9]
-        print "New entry:", newentry
         entries.append(newentry)
 
+
+
     # package data for jsonification
-    jdata = {'planet_id':planet_id, 'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'entries':entries}
+    jdata = {'planet_id':planet_id, 'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'entries':entries, 'feeds':feeds}
     return json.dumps(jdata)
 
 

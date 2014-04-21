@@ -8,12 +8,16 @@
     <div class="row-fluid" id="header-wrapper">
       <div class="span2">
         <div id="header-image" class="hidden-phone image-holder">
+          <!-- todo: put an image here --> 
           <h1>logo?</h1>
         </div>
       </div>
       <div class="span10" id="page-title">
+        {% if planet_name %}
+        <h1>{{planet_name}}</h1>
+        {% else %}
         <h1>The Big Bang</h1>
-        <h3>Create your own galaxy.</h3>
+        {% endif %}
       </div>
     </div><!-- /.row for header -->
     <div class="row-fluid"> <!-- start row for page body -->

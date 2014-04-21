@@ -14,7 +14,7 @@ class Feed(db.Model):
     etag = Column(UnicodeText, nullable=True) # from feedparser during first pull; sometimes buggy
     title = Column(UnicodeText, nullable=True) # from feedparser during first pull
     blogurl = Column(UnicodeText, nullable=True) # from feedparser during first pull
-    # track RSS vs Atom vs Netscape vs CDF - for statistical purposes
+    # track RSS vs Atom vs Netscape vs CDF - for statistical purposes / later improvements
     feedtype = Column(UnicodeText, nullable=True) # from feedparser during first pull. 
     # refer to corresponding planet
     planet_id = Column(Integer, ForeignKey('planet.id'), nullable=False)
