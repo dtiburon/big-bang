@@ -7,6 +7,7 @@
                     <div class="entry" id="entry">
                         <div class="entrytitle box">
                         </div>
+                        <img src="" class="author-image img-rounded">
                         <div class="entrycontent">
                         </div>
                         <div class="entryfooter">
@@ -23,24 +24,26 @@
                 <div class="sidebar box">
                     <h4>About this Planet</h4>
                     <div id="description"></div>
+                    <!-- todo: display this once we have admin login functionality and can pass in the admin email address & name.
                     <h4>Planet Admin</h4>
                     To give feedback or request a change, email <a href="admin_email">admin_name</a>. 
-                    <h5><a href="/admin">Admin Interface</a></h5>
+                    -->
+                    <h5><a href="/planet/{{slug}}/admin">Admin Interface</a></h5>
                 </div>
                 <div class="sidebar box">
                     <h4>Copyright</h4>
                     <p>Posts are copyright their respective authors. Click the blog title of an entry to see that blog's terms for redistribution.</p>
                 </div>
                 <div class="sidebar box">
+                    <!-- todo: build XML template for planet atom feed, then link to it here.
                     <h4>Subscribe to this Planet</h4>
                     <ul class="unstyled">
                         <li> <a href="http://planeteria.org/wfs/atom.xml" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"> All feeds (Atom)</a></li>
-                        <li> <a href="http://planeteria.org/wfs/opml.xml" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"> All feeds (OPML)</a></li>
                     </ul>
-
-                    <h4>Feeds in this Planet</h4><!-- todo: generate list of feeds dynamically -->
+                    -->
+                    <h4>Feeds in this Planet</h4>
+                    <!-- generates list of feeds dynamically -->
                     <ul class="unstyled" id="feedlist">
-                        <li><a href="" title="subscribe"><img src="/static/img/feed-icon-10x10.png" alt="(feed)"></a> <a href="">Teresa Cho</a></li>
                     </ul>
                 </div><!-- / #planet-subscriptions -->
             </div><!-- /.span3 (right column) -->
@@ -87,7 +90,6 @@ function load_planet_data(jdata) {
     console.log("Planet description: " + planet_desc);
     // populate DOM with planet-specific data
     $('#description').append(planet_desc);
-    $('#page-title h1').append(": " + planet_name);
     // load list of feeds from database
     var feed_list = jdata['feeds'];
     console.log(jdata['feeds']);
@@ -98,12 +100,11 @@ function load_planet_data(jdata) {
         var blogitem = $('<li><a href="'+feed_list[i]['feed_url']+'"><img src="/static/img/feed-icon-10x10.png"></a> '+feed_list[i]['name']+'</li>')
         $('#feedlist').append(blogitem)
     }
-    // load list of entries from database
+    // load entries from database
     var entry_list = jdata['entries'];
     var num_entries = $(entry_list).size();
     for (i = 0; i < num_entries; i++) {
         add_entry(entry_list[i]);
-
     }
 }
 
@@ -112,28 +113,39 @@ function add_entry(entry)
     // clone the hidden template and make it visible
     $("#template-entry").children().clone(true).prependTo("#all-entries");
     // set ID to include in entry DOM somewhere for debugging
-    var id = entry.id;
+    var id = entry.entry_id;
     console.log("Entry ID: " + id);
     // add unique feed ID # to DOM so it won't be identified in the next loop
     $("#all-entries #entry").attr("id", "entry-" + id);
 
     // populate entry with entry data
     // # entry = {'feed_id':int(*), 'name':u'*', 'feed_url':u'*', 'image':u'*', 'entry_id':int(*), 'body':u'*', 'title':u'*', 'date':u'*', 'author':u'*', 'entry_url':u'*'}
-    var entry_url = entry.entry_url
-    var title = entry.title
-    var date = entry.date
-    var name = entry.name
-    var author = entry.author
-    var content = entry.content
+    var entry_url = entry.entry_url;
+    var title = entry.title;
+    var date = entry.date;
+    var name = entry.name;
+    var author = entry.author;
+    var content = entry.content;
+    var image = entry.image;
 
-    // create title with link to entry
-    var titlelink = "<a href='" + entry_url + "'>" + title + "</a target='_blank'>"
+    // create title with feed name and link to entry
+    var titlelink = name + " - <a href='" + entry_url + "'>" + title + "</a target='_blank'>";
     $('#entry-' + id).find('.entrytitle').append(titlelink);
+    // include image if available
+    if (image != undefined) {
+        $('#entry-' + id).find('.author-image').attr("src", image);
+    }
     $('#entry-' + id).find('.entrycontent').append(content);
-    $('#entry-' + id).find('.entryfooter').append(date);
-
-    // todo: add image from feed data
-
+    // create footer content with author name if available + date published
+    // todo: debug author if statement; it still passes author if it's undefined.
+    if (typeof(author.type) != undefined) {
+        console.log("Author type: " + author.type);
+        var footer = "by " + author + " on " + date;
+    }   
+    else {
+        var footer = date;
+    }
+    $('#entry-' + id).find('.entryfooter').append(date); // append footer instead of date when conditional above is fixed.
 
 }
 </script>

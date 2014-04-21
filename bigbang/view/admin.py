@@ -39,7 +39,8 @@ def planet(slug):
     if not slug:
         raise BadRequest(description="Cannot load. Planet name missing.")
     else:
-        return render_template('planet-feed', slug=slug)
+        planet = Planet.query.filter_by(slug=slug).first()
+        return render_template('planet-feed', slug=slug, planet_name=planet.name)
 
 @app.route("/planet/<slug>/admin")
 def admin(slug):
@@ -49,9 +50,15 @@ def admin(slug):
     # note: planet creation form should send user to URL http://bigbang.org/planet/<slug>/admin?new=1
     new_planet = int(request.args.get('new', "0"))  
     print "Is planet new?", new_planet
-
-    # render template and pass in any variables to be used in template
-    return render_template('planet-admin', slug=slug, new_planet=new_planet)
+    site_url = "http://" + app.config['SITE_DOMAIN']
+    print site_url
+    if not new_planet:
+        planet = Planet.query.filter_by(slug=slug).first()
+        planet_name = planet.name
+    else:
+        planet_name = ""
+    # render template and pass in any variables to be used in jinja template
+    return render_template('planet-admin', slug=slug, new_planet=new_planet, planet_name=planet_name, site_url=site_url)
 
 @app.route("/ws/planet/<slug>", methods=["GET"])
 def ws_planet_view(slug):

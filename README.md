@@ -73,7 +73,14 @@ It should display something like:
     * Restarting with reloader
 
 Then open a browser window and enter the URL http://127.0.0.1:5000/ - _voila_!  Leave the terminal window open that's running server.py.
-In the browser, you can then follow the instructions to create a planet, add feeds to it, and save (currently no password is required). 
+
+Config file: before loading your site in the browser, create a file named config.py and save it to the bigbang directory. The file contents only need one configuration, which is:
+
+    SITE_DOMAIN = "http://127.0.0.1:5000/"
+
+(When the site is deployed on a server, save a separate config.py file on the server with the site domain as the value. If you look in the .gitignore file, you'll notice that the config.py file is ignored by git.)
+
+In the browser, you can then follow the instructions to create a planet, add feeds to it, and save (currently no password is required, that will be added). 
 
 Pulling feed content: in another terminal window, once you have added new feeds to a planet, run spider.py to pull the feed data (right now it needs to be done manually; that will be fixed soon):
 
