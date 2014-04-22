@@ -16,6 +16,7 @@ app = Flask(__name__,
             template_folder = TEMPLATE_FOLDER)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + SQLALCHEMY_DATABASE_FILE
+app.config['PROPAGATE_EXCEPTIONS'] = True # for debugging; turn off when deployed
 
 # create database object
 db = SQLAlchemy(app)
