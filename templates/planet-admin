@@ -27,7 +27,7 @@
                             <div class="image-holder span1">
                                 <h1>?</h1>
                             </div>
-                            <a class="btn btn-mini btn-danger feedbtn-rm" id="rm" title="Remove this feed"><i class="icon-white icon-remove"></i></a>
+                            <a class="btn btn-mini btn-danger feedbtn-rm" title="Remove this feed"><i class="icon-white icon-remove"></i></a>
                             <fieldset>
                                 <label>Feed Name</label>
                                 <input class="input-large" type="text" id="feed-name" name="feed-name" placeholder="Blog author or title">
@@ -70,6 +70,8 @@ var planet_id = 0;
 
 $(document).ready(function()
 {
+    // feed delete function
+    $( ".feedbtn-rm" ).click(rm_feed);
     // if planet is not new, load planet feed data from database
     if (new_planet == 0) {
 
@@ -110,6 +112,14 @@ function add_feed(id)
     console.log("added new feed window; next_id is now " + next_id);
 
 }
+
+function rm_feed()
+{
+    // remove the feed box from the dom; save process will recognize it's omitted and update the server
+    console.log("Remove button clicked!");
+    $(this).parent().remove();
+}
+
 
 function load_planet()
 {
@@ -191,7 +201,6 @@ function save()
     console.log("Planet description is " + planet_desc);
     console.log("Planet slug is " + slug);
 
-    console.log("Saving feeds...");
     var feeds_to_save = [];
     $("#all-feeds").children().each(function(index) {
         var feed_id = $(this).attr('id');
@@ -206,7 +215,7 @@ function save()
         // add each new feed to the list of feeds
         feeds_to_save.push(feed);
     });
-
+    console.log("Feeds to be saved: " + feeds_to_save)
 
     $.ajax({
             url: "/ws/planet/" + encodeURIComponent('{{ slug }}') + "/admin",
