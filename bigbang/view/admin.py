@@ -8,7 +8,8 @@ from bigbang.model.planet import Planet
 from bigbang.model.feed import Feed
 from bigbang.model.feed_content import FeedContent
 from bigbang import app, db
-import time # datetime might not be necessary
+import time
+import config # make sure you have a config.py file in the same directory that designates the site domain
 
 @app.route("/")
 def index():
@@ -50,7 +51,7 @@ def admin(slug):
     # note: planet creation form should send user to URL http://bigbang.org/planet/<slug>/admin?new=1
     new_planet = int(request.args.get('new', "0"))  
     print "Is planet new?", new_planet
-    site_url = "http://" + app.config['SITE_DOMAIN']
+    site_url = "http://" + config.SITE_DOMAIN
     print site_url
     if not new_planet:
         planet = Planet.query.filter_by(slug=slug).first()
