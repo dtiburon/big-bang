@@ -52,7 +52,6 @@ def admin(slug):
     new_planet = int(request.args.get('new', "0"))  
     print "Is planet new?", new_planet
     site_url = "http://" + config.SITE_DOMAIN
-    print site_url
     if not new_planet:
         planet = Planet.query.filter_by(slug=slug).first()
         planet_name = planet.name
@@ -130,6 +129,9 @@ def ws_planet_admin(slug):
         print "Planet ID:", planet_id
         feeds_to_save = data['feeds']
         to_delete = {}
+        print 
+        print "========== Start of save =========="
+        print_feed_info(feeds_to_save, to_delete)
 
         # load/create planet data object
         if planet_id == 0: # if a new planet that doesn't exist in the DB
@@ -143,7 +145,7 @@ def ws_planet_admin(slug):
             
             # create checklist with db feed URLS to determine which ones no longer exist in the DOM for later deletion
             for feed in db_feeds:
-                to_delete[feed.url] = feed
+                to_delete[feed.id] = feed
 
         # save Planet data
         planet.slug = data['slug']
@@ -158,8 +160,10 @@ def ws_planet_admin(slug):
                 is_new = update_feeds(feed, db_feeds, to_delete) # returns False if it exists in DB
             else:
                 is_new = True
-
+            print "Is feed", feed['url'], "new?", is_new
+            
             if is_new:
+                print "creating a new feed object for the new feed"
                 newfeed = Feed()
                 newfeed.name = feed['name']
                 newfeed.url = feed['url']
@@ -170,13 +174,22 @@ def ws_planet_admin(slug):
         db.session.add(planet)
 
         print "Deleting %i removed feeds." % (len(to_delete))
+        print "to_delete:", to_delete
         for feed in to_delete:
+            
+            # printouts for troubleshooting 
+            feed_obj = to_delete[feed]
+            print feed_obj
+            feed_entries = FeedContent.query.filter_by(feed_id=feed).all()
+            print len(feed_entries), "entries associated with this feed."
+
             db.session.delete(to_delete[feed])
 
         try:
             db.session.commit()
-        except IntegrityError:
-            raise BadRequest(description="Planet data does not meet database constraints.")
+        except IntegrityError as inst:
+            print str(inst)
+            raise BadRequest(description="Planet data does not meet database constraints: %s" % str(inst))
 
         # Flask requires that this function return jquery but it's not used.
         return json.dumps({})
@@ -218,24 +231,47 @@ def update_feeds(feed, db_feeds, to_delete):
 # Cross-references feed against a planet's feeds in the database and updates DB as needed.
 
     for oldfeed in db_feeds:
-        if feed['url'] == oldfeed.url:
-
+        print "Cross-referencing oldfeed %s | %s with new feeds." % (oldfeed.id, oldfeed.url)
+        # print "Oldfeed types: %s | %s " % (type(oldfeed.id), type(oldfeed.url))
+        # print "Newfeed: %s | %s" % (feed['id'], feed['url'])
+        # print "Newfeed types: %s | %s " % (type(feed['id']), type(feed['url']))
+        if int(feed['id']) == oldfeed.id:
+            # print "Feed %s | %s is a match!" % (feed['id'], feed['url'])
+            
             # Remove from the list of items to delete.
-            to_delete.pop(feed['url'])
+            to_delete.pop(int(feed['id']))
 
             # Check to see if feed data has been updated by user and if so, update DB.  
             if feed['name'] != oldfeed.name:
                 oldfeed.name = feed['name']
+                print "feed name updated"
 
             if feed['url'] != oldfeed.url:
                 oldfeed.url = feed['url']
+                print "feed url updated"
 
             if feed['image'] != oldfeed.image:
                 oldfeed.image = feed['image']
+                print "feed image updated"
 
-            print "Updated", feed['url'], "ID", oldfeed.id
+            print "Updated", "ID", oldfeed.id, "|", feed['url']
 
             return False
 
     # if for loop hasn't found any duplicates:
     return True
+
+def print_feed_info(feeds_to_save, to_delete):
+    print "Saving data for planet", planet
+    print "Total feeds to save:", len(feeds_to_save)
+    for i, feed in enumerate(feeds_to_save):
+        print "== Feed", i, "to save =="
+        print "id: %s  | name: %s  | url: %s  | image: %s" % (feed['id'], feed['name'], feed['url'], feed['image'])
+    print
+    num_deletions = len(to_delete)
+    print "Items to delete:", num_deletions
+    for i, feed in enumerate(to_delete):
+        print "== Feed", i, "to be deleted =="
+        print "id: %s  | name: %s  | url: %s  | image: %s" % (feed['id'], feed['name'], feed['url'], feed['image'])
+    print 
+        
