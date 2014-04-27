@@ -21,7 +21,7 @@ class FeedContent(db.Model):
 
     query = db.session.query_property()
     def __init__(self, url = u'', title = u'', body = u'', date = u'', author = u''):
-        # list all columns once they're determined
+        # list all columns except foreign key
         self.url = url
         self.title = title
         self.body = body

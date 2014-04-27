@@ -26,6 +26,7 @@ from model.feed import Feed
 from model.feed_content import FeedContent
 
 Planet.feed = relationship(Feed, backref=backref("planet"))
-Feed.feed_content = relationship(FeedContent, backref=backref("feed"))
+Feed.feed_content = relationship(FeedContent, cascade="delete", backref=backref("feed"))
+
 
 from bigbang.view import admin

@@ -136,7 +136,7 @@ def ws_planet_admin(slug):
         # load/create planet data object
         if planet_id == 0: # if a new planet that doesn't exist in the DB
             planet = Planet()
-
+            db.session.add(planet)
         else: # if planet already exists in the DB
             planet = Planet.query.filter_by(slug=slug).first()
 
@@ -171,7 +171,6 @@ def ws_planet_admin(slug):
                 newfeed.planet = planet
                 db.session.add(newfeed)
 
-        db.session.add(planet)
 
         print "Deleting %i removed feeds." % (len(to_delete))
         print "to_delete:", to_delete
