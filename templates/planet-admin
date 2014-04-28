@@ -1,6 +1,7 @@
 {% extends 'layout-site' %}
 {% block body %}
             <div class="span8 box"><!-- left column (Feed Management) -->
+                <div class="alert" id="status-message" style="display: none"> </div>
                 <h3>Edit Planet</h3>
                 <form class="feed-form">
                     <div class="form-inline">
@@ -17,7 +18,7 @@
                     </fieldset>
                 <hr>
                 <h3>Planet Feeds</h3>
-                    <div class="form-inline">                    
+                    <div class="form-inline">
                         <p><a class="btn btn-small btn-success" id="feedbtn-add" onclick='add_feed()'><i class="icon-plus icon-white"></i> Add</a> and <a class="btn btn-small btn-danger" href="#"><i class="icon-white icon-remove"></i> Remove</a> feeds as needed.</p>
                     </div> <!-- / .form-inline -->
 
@@ -75,7 +76,7 @@ $(document).ready(function()
     // if planet is not new, load planet feed data from database
     if (new_planet == 0) {
 
-        // display planet page url in "About" sidebar. !! todo: pass in domain name
+        // display planet page url in "About" sidebar. 
         var planet_url = site_url + "/planet/" + slug
         $('#about p').append('<a href="'+planet_url+'">'+planet_url+'</a>')
 
@@ -116,10 +117,23 @@ function add_feed(id)
 function rm_feed()
 {
     // remove the feed box from the dom; save process will recognize it's omitted and update the server
-    console.log("Remove button clicked!");
     $(this).parent().remove();
 }
 
+// set_message() and clear_message() displays & hides error message to user
+function set_message(txt)
+{
+    var btn = "<a onclick='clear_message()' title='Clear message' id='alert-clr'><i class='icon-remove-sign'></i></a>"
+    $("#status-message").text(txt);
+    $("#status-message").append(" " + btn);
+    $("#status-message").show();
+}
+
+function clear_message()
+{
+    $("#status-message").text("");
+    $("#status-message").hide();
+}
 
 function load_planet()
 {
@@ -130,13 +144,17 @@ function load_planet()
             success: function(json)
             {
                 load_planet_data(json);
-                console.log("all feeds loaded from database.");
+                var success_msg = "All feeds loaded from database. You may now commence editing."
+                console.log(success_msg);
+                set_message(success_msg);
             },
             error: function(xhr, txtStatus, errorThrown) // todo: fix error handling
             {
-                console.log("Failed to load planet feeds. Status: " + xhr.status);
+                var fail_msg = "Failed to load planet feeds. Status: " + xhr.status;
+                console.log(fail_msg);
+                set_message(fail_msg);
             }
-            // add handling of error, thrown when someone loads the URL of a planet that doesn't exist. (view/admin.py 133)
+            // add handling of AttributeError thrown when someone loads the URL of a planet that doesn't exist. (view/admin.py 207)
     });
 }
 
@@ -226,9 +244,10 @@ function save()
             contentType: "application/json; charset=utf-8", 
             success: function(json)
             {
-                console.log("saved all feeds.");
                 // add "success" message to tell user save was successful.
-                alert('Changes saved!');
+                var success_msg = 'Changes saved.'
+                console.log(success_msg);
+                set_message(success_msg);
                 // if planet is new, reload page w/ dif. URL
                 if (new_planet > 0) {
                     window.location.assign("/planet/" + encodeURIComponent('{{ slug }}') + "/admin");
@@ -237,7 +256,9 @@ function save()
             // todo: fix error handling
             error: function(xhr, txtStatus, errorThrown) 
             {
-                console.log("Failed to save planet feeds. Status: " + xhr.status);
+                var fail_msg = "Failed to save planet feeds. Status: " + xhr.status;
+                console.log(fail_msg);
+                set_message(fail_msg);
             }
     });
 
