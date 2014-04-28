@@ -164,6 +164,8 @@ def ws_planet_admin(slug):
             
             if is_new:
                 print "creating a new feed object for the new feed"
+                # todo: make sure feed content is not empty. if it is, ignore it.
+                # (or do this with the form validation javascript?)
                 newfeed = Feed()
                 newfeed.name = feed['name']
                 newfeed.url = feed['url']
