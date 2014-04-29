@@ -2,5 +2,5 @@
               <a name="donate"></a>
               <h3>Donate</h3>
               <p>Please help support this site.</p>
-              <button class="btn btn-success">Donate</a>
+              <a class="btn btn-success" id="donate" title="Make a donation">Donate</a>
           </div> <!-- /.sidebar box donate-->

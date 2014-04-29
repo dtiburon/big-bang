@@ -213,6 +213,10 @@ function load_planet_data(json)
         $("#feed-url-" + feed_id).val(feed_list[i]['url']);
         $("#feed-img-" + feed_id).val(feed_list[i]['image']);
     }
+    // add donate button link (todo: pull link from site config file)
+    var url = 'http://gnome.org/opw/'
+    $("#donate").attr("href", url)
+  
 }
 
 function save()
