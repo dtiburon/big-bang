@@ -154,7 +154,7 @@ function load_planet()
             success: function(json)
             {
                 load_planet_data(json);
-                var success_msg = "All feeds loaded from database. You may now commence editing."
+                var success_msg = "All planet data loaded from database. You may now commence editing."
                 console.log(success_msg);
                 set_message(success_msg);
             },
@@ -194,6 +194,7 @@ function load_planet_data(json)
     // if there are no feeds in the DB, load an empty feed form
     if (num_feeds == 0){
         add_feed(next_id);
+        set_message("This planet doesn't have any blog feeds. Please add some below.");
     };
     // iterate over feeds list and populate the page with feed data
     for (i = 0; i < num_feeds; i++) 
