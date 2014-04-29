@@ -1,0 +1,10 @@
+{% extends 'layout-site' %}
+{% block body %}
+      <div class="span12">
+        <h2>Uh Oh!</h2>
+        <p>Something has gone wrong. Here are the details:</p>
+        <div class="alert">
+        {{error}}
+        </div>
+      </div><!-- / .span12 page body-->
+{% endblock %}

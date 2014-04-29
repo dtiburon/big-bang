@@ -68,7 +68,7 @@
 <script type="text/javascript">
 
 var next_id = 42; // next ID # to be assigned to a brand new feed; feeds loaded from DB use DB id
-var site_url = "{{ site_url }}"
+var site_url = "{{ site_url }}";
 var slug = "{{ slug }}";
 var new_planet = {{ new_planet }};
 var planet_name = "{{ planet_name }}";
@@ -164,7 +164,6 @@ function load_planet()
                 console.log(fail_msg);
                 set_message(fail_msg);
             }
-            // add handling of AttributeError thrown when someone loads the URL of a planet that doesn't exist. (view/admin.py 207)
     });
 }
 

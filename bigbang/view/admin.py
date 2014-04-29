@@ -23,15 +23,34 @@ def thanks():
 def new():
     return render_template('newplanet')
 
+@app.route("/error")
+def error():
+    error = "The database is rather pooped."
+    return render_template('error', error=error)
+
 @app.route("/directory")
 def directory():
-    return render_template('directory')
+    all_planets = Planet.query.all()
+    print all_planets
+    print "all_planets type:", type(all_planets) #list
+    planets = [] #[{planet}, {planet}]
+    site_url = "http://" + config.SITE_DOMAIN
+    for planet in all_planets:
+        print "Planet:", planet
+        add_planet = {} #{'name': <planet.name>, 'url': <url>, 'desc': <description>} 
+        print "Planet name:", planet.name
+        add_planet['name'] = planet.name
+        add_planet['url'] = os.path.join(site_url,'planet', planet.slug)
+        add_planet['desc'] = planet.desc
+        planets.append(add_planet)
+    print "Directory planet list:", planets
+    return render_template('directory', planets=planets)
 
 @app.route("/planet/new", methods=["POST"])
 def newplanet():
     slug = request.form['slug']
     print slug
-    planet_name = request.form['name']
+    planet_name = request.form['name'] # todo: pass planet_name value to planet admin page
 
     return redirect(os.path.join('planet', slug, 'admin?new=1'))
 
@@ -41,7 +60,11 @@ def planet(slug):
         raise BadRequest(description="Cannot load. Planet name missing.")
     else:
         planet = Planet.query.filter_by(slug=slug).first()
-        return render_template('planet-feed', slug=slug, planet_name=planet.name)
+        if not planet:
+            msg = "There is no planet in the database with the slug <strong>'%s'</strong>. Check the URL for typos, or visit the planet directory to get the correct link." % slug
+            return render_template('error', error=msg)
+        else:
+            return render_template('planet-feed', slug=slug, planet_name=planet.name)
 
 @app.route("/planet/<slug>/admin")
 def admin(slug):
@@ -54,7 +77,11 @@ def admin(slug):
     site_url = "http://" + config.SITE_DOMAIN
     if not new_planet:
         planet = Planet.query.filter_by(slug=slug).first()
-        planet_name = planet.name
+        if not planet:
+            msg = "There is no planet in the database with the slug <strong>'%s'</strong>. Check the URL for typos, or visit the planet directory to get the correct link." % slug
+            return render_template('error', error=msg)
+        else:
+            planet_name = planet.name
     else:
         planet_name = ""
     # render template and pass in any variables to be used in jinja template
