@@ -25,25 +25,20 @@ def new():
 
 @app.route("/error")
 def error():
-    error = "The database is rather pooped."
+    error = "There is actually nothing wrong! :) You're just viewing the default error message when there's no error to display."
     return render_template('error', error=error)
 
 @app.route("/directory")
 def directory():
     all_planets = Planet.query.all()
-    print all_planets
-    print "all_planets type:", type(all_planets) #list
     planets = [] #[{planet}, {planet}]
     site_url = "http://" + config.SITE_DOMAIN
     for planet in all_planets:
-        print "Planet:", planet
         add_planet = {} #{'name': <planet.name>, 'url': <url>, 'desc': <description>} 
-        print "Planet name:", planet.name
         add_planet['name'] = planet.name
         add_planet['url'] = os.path.join(site_url,'planet', planet.slug)
         add_planet['desc'] = planet.desc
         planets.append(add_planet)
-    print "Directory planet list:", planets
     return render_template('directory', planets=planets)
 
 @app.route("/planet/new", methods=["POST"])
