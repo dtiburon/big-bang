@@ -3,10 +3,16 @@
       <div class="span12">
         <h2>Planet Directory</h2>
         <p>These are the planets that live on this site.</p>
-        <ul>
+        
+        {% if planets|length > 0 %}
+        <ul>    
             {% for planet in planets %}
             <li><a href="{{planet.url}}">{{planet.name}}</a>: {{planet.desc}}</li>
             {% endfor %}
         </ul>
+        {% else %}
+        <div class="alert">There don't seem to be any planets in the database. Try <a href="/new">creating a planet</a> first.</div>
+        {% endif %}
+        
       </div><!-- / .span12 page body-->
 {% endblock %}
