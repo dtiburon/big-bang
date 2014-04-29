@@ -2,6 +2,8 @@
 {% block body %}
 <!-- END HEADER TEMPLATE, START BODY -->
             <div class="span9"><!-- Body Text -->
+                <!-- Alert message; hidden by default -->
+                <div class="alert" id="status-message" style="display: none"></div>
                 <!-- Template for single entry; hidden -->
                 <div style="display: none" id="template-entry"><!-- template for a single entry -->
                     <div class="entry" id="entry">
@@ -59,30 +61,45 @@ $(document).ready(function()
 {
     // on pageload: 
     // 1. Load planet data: Name, description, contact, list of feeds.
-    // 2. (in progress) pull database of feed content for each feed in feed list, populate feed display
+    // 2. Pull feed content from database for each feed in feed list, populate feed display
     load_planet(slug);
 
 });
 
+function set_message(txt)
+{
+    $("#status-message").text(txt);
+    $("#status-message").show();
+}
+
+function clear_message()
+{
+    $("#status-message").text("");
+    $("#status-message").hide();
+}
+
 function load_planet(slug) {
     console.log("Loading " + slug);
+    set_message("Loading entries")
     $.ajax({
             url: "/ws/planet/" + encodeURIComponent(slug),
             dataType : "json", 
             success: function(jdata)
             {
                 load_planet_data(jdata);
-                console.log("all feeds loaded from database.");
+                console.log("All feeds loaded from database.");
             },
             error: function(xhr, txtStatus, errorThrown) // todo: fix error handling to integrate with existing Planeteria code
             {
                 console.log("Failed to load planet feeds. Status: " + xhr.status);
+                set_message("Failed to load planet feeds. Status: " + xhr.status);
             }
     });
 }
 
 function load_planet_data(jdata) {
     console.log("Loading planet data");
+
     //jdata = {'slug':slug, 'planet_name':planet_name, 'planet_desc':planet_desc, 'feeds':list_of_feeds, 'entries':list_of_entries}
     planet_name = jdata['planet_name']
     planet_desc = jdata['planet_desc']
@@ -92,9 +109,13 @@ function load_planet_data(jdata) {
     $('#description').append(planet_desc);
     // load list of feeds from database
     var feed_list = jdata['feeds'];
-    console.log(jdata['feeds']);
     var num_feeds = $(feed_list).size();
     console.log("Found "+num_feeds+" feeds in this planet.");
+    if (num_feeds == 0){
+        var error = "There are no feeds in this planet. Ask the planet admin to add some feeds!"
+        $('#feedlist').append(error)
+    }
+    // populate feed list in sidebar w/ links
     for (i = 0; i < num_feeds; i++) {
         // # feed = {'id':21, 'feed_url':'http://dtiburon.wordpress.com/rss', 'name':'Aletas blog', 'image':'http://imgur.com/4738y69'}
         var blogitem = $('<li><a href="'+feed_list[i]['feed_url']+'"><img src="/static/img/feed-icon-10x10.png"></a> '+feed_list[i]['name']+'</li>')
@@ -103,9 +124,15 @@ function load_planet_data(jdata) {
     // load entries from database
     var entry_list = jdata['entries'];
     var num_entries = $(entry_list).size();
-    for (i = 0; i < num_entries; i++) {
-        add_entry(entry_list[i]);
+    if (num_entries == 0){
+        set_message("There are no entries available to load. Perhaps this planet needs some feeds.");
     }
+    else { 
+        for (i = 0; i < num_entries; i++) {
+            add_entry(entry_list[i]);
+        }
+        clear_message();
+    };
 }
 
 function add_entry(entry)
