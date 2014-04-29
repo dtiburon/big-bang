@@ -56,7 +56,7 @@ def planet(slug):
     else:
         planet = Planet.query.filter_by(slug=slug).first()
         if not planet:
-            msg = "There is no planet in the database with the slug <strong>'%s'</strong>. Check the URL for typos, or visit the planet directory to get the correct link." % slug
+            msg = "There is no planet in the database with the slug <strong>'%s'</strong>. Check the URL for typos, or visit the <a href='/directory'>directory</a> to get the correct link." % slug
             return render_template('error', error=msg)
         else:
             return render_template('planet-feed', slug=slug, planet_name=planet.name)
@@ -73,7 +73,7 @@ def admin(slug):
     if not new_planet:
         planet = Planet.query.filter_by(slug=slug).first()
         if not planet:
-            msg = "There is no planet in the database with the slug <strong>'%s'</strong>. Check the URL for typos, or visit the planet directory to get the correct link." % slug
+            msg = "There is no planet in the database with the slug <strong>'%s'</strong>. Check the URL for typos, or visit the <a href='/directory'>directory</a> to get the correct link." % slug
             return render_template('error', error=msg)
         else:
             planet_name = planet.name
