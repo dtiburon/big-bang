@@ -1,7 +1,12 @@
 {% extends 'layout-site' %}
 {% block body %}
             <div class="span8 box"><!-- left column (Feed Management) -->
-                <div class="alert" id="status-message" style="display: none"> </div>
+                <!--Template for alert notification-->
+                <div id="alert-template" style="display: none">
+                    <div class="alert status-message"> </div>
+                </div>
+                <div id="all-notifications"><!-- Notifications display here -->
+                </div>
                 <h3>Edit Planet</h3>
                 <form class="feed-form">
                     <div class="form-inline">
@@ -14,7 +19,7 @@
 
                         <label>Planet Description</label>
                         <textarea rows="5" class="input-xxlarge" id="planet-desc" name="planet-desc"></textarea>
-                        <span class="help-block">Describe the planet theme/topic and any other relevant information such as IRC channel.</span>
+                        <span class="help-block">Describe the planet theme/topic and any other relevant information such as IRC channel.</span> 
                     </fieldset>
                 <hr>
                 <h3>Planet Feeds</h3>
@@ -73,6 +78,8 @@ $(document).ready(function()
 {
     // feed delete function
     $( ".feedbtn-rm" ).click(rm_feed);
+    // clear notification function
+    $(".alert").click(clear_message);
     // if planet is not new, load planet feed data from database
     if (new_planet == 0) {
 
@@ -94,7 +101,7 @@ $(document).ready(function()
 function add_feed(id)
 {
     // clone the hidden template and make it visible
-    $("#template-feed-form").children().clone(true).prependTo("#all-feeds");
+    $("#template-feed-form").children().clone(true).appendTo("#all-feeds");
     // specify default ID (when onclick is used):
     if (typeof id === "undefined") {
         id = next_id;
@@ -118,21 +125,24 @@ function rm_feed()
 {
     // remove the feed box from the dom; save process will recognize it's omitted and update the server
     $(this).parent().remove();
+    // then add an alert box to indicate it was removed. (how to pass in feedname? use data object?)
+    set_message("Feed removed. Click SAVE button to save your changes.")
 }
 
-// set_message() and clear_message() displays & hides error message to user
+// set_message() and clear_message() displays & hides notification messages to user
 function set_message(txt)
 {
-    var btn = "<a onclick='clear_message()' title='Clear message' id='alert-clr'><i class='icon-remove-sign'></i></a>"
-    $("#status-message").text(txt);
-    $("#status-message").append(" " + btn);
-    $("#status-message").show();
+    $("#alert-template").children().clone(true).appendTo("#all-notifications");
+    // then add text to the last child of #all-notifications
+    var btn = "<a onclick='clear_message()' title='Clear notification' class='alert-clr'><i class='icon-remove-sign'></i></a>"
+    $("#all-notifications").children().last().text(txt);
+    $("#all-notifications").children().last().append(" " + btn);
 }
 
 function clear_message()
 {
-    $("#status-message").text("");
-    $("#status-message").hide();
+    // remove the parent div of the button that was clicked
+    $(this).remove();
 }
 
 function load_planet()
@@ -203,7 +213,6 @@ function load_planet_data(json)
         $("#feed-name-" + feed_id).val(feed_list[i]['name']);
         $("#feed-url-" + feed_id).val(feed_list[i]['url']);
         $("#feed-img-" + feed_id).val(feed_list[i]['image']);
-
     }
 }
 
@@ -248,6 +257,8 @@ function save()
                 var success_msg = 'Changes saved.'
                 console.log(success_msg);
                 set_message(success_msg);
+                // todo: remove all other notifications before adding "Changes saved" notification.
+
                 // if planet is new, reload page w/ dif. URL
                 if (new_planet > 0) {
                     window.location.assign("/planet/" + encodeURIComponent('{{ slug }}') + "/admin");
