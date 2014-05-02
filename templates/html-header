@@ -3,7 +3,7 @@
     <title>The Big Bang: Create your own galaxy</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min-2.2.2.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.min-2.2.2.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min-2.3.2.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.min-2.3.2.css">
     <link rel="stylesheet" type="text/css" href="/static/css/style.css">
   </head>

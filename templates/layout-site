@@ -24,6 +24,6 @@
 {% block body %}{% endblock %}
     </div><!-- / row for page body-->
   </div> <!-- /container -->
-    <script type="text/javascript" src="/static/js/bootstrap.min-2.2.2.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min-2.3.2.js"></script>
 </body>
 </html>
