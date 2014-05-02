@@ -70,7 +70,6 @@
 var next_id = 42; // next ID # to be assigned to a brand new feed; feeds loaded from DB use DB id
 var site_url = "{{ site_url }}";
 var slug = "{{ slug }}";
-var new_planet = {{ new_planet }};
 var planet_name = "{{ planet_name }}";
 var planet_id = 0;
 
@@ -80,21 +79,14 @@ $(document).ready(function()
     $( ".feedbtn-rm" ).click(rm_feed);
     // clear notification function
     $(".alert").click(clear_message);
-    // if planet is not new, load planet feed data from database
-    if (new_planet == 0) {
 
-        // display planet page url in "About" sidebar. 
-        var planet_url = site_url + "/planet/" + slug
-        $('#about p').append('<a href="'+planet_url+'">'+planet_url+'</a>')
+    // display planet page url in "About" sidebar. 
+    var planet_url = site_url + "/planet/" + slug
+    $('#about p').append('<a href="'+planet_url+'">'+planet_url+'</a>')
 
-        // load the rest of the planet & feed data from database
-        load_planet();
-    }
-    else
-    // if there are no feeds to load, load a single-feed box:
-    {
-        add_feed(next_id);
-    }
+    // load the rest of the planet & feed data from database
+    load_planet();
+    
     console.log("Ready!");
 });
 
@@ -158,7 +150,7 @@ function load_planet()
                 console.log(success_msg);
                 set_message(success_msg);
             },
-            error: function(xhr, txtStatus, errorThrown) // todo: fix error handling
+            error: function(xhr, txtStatus, errorThrown)
             {
                 var fail_msg = "Failed to load planet feeds. Status: " + xhr.status;
                 console.log(fail_msg);
@@ -176,7 +168,6 @@ function load_planet_data(json)
     planet_id = json['planet_id'];
     console.log("Planet ID is: " + planet_id)
     // change page title to display planet name
-    // $('#page-title h1').append(": " + planet_name)
     var page_header = $('#page-title h1');
     for(var i in page_header){
          page_header[i].innerHTML=planet_name;
@@ -261,17 +252,13 @@ function save()
                 var success_msg = 'Changes saved.'
                 console.log(success_msg);
                 set_message(success_msg);
+                
                 // todo: remove all other notifications before adding "Changes saved" notification.
 
-                // if planet is new, reload page w/ dif. URL
-                if (new_planet > 0) {
-                    window.location.assign("/planet/" + encodeURIComponent('{{ slug }}') + "/admin");
-                }
             },
-            // todo: fix error handling
             error: function(xhr, txtStatus, errorThrown) 
             {
-                var fail_msg = "Failed to save planet feeds. Status: " + xhr.status;
+                var fail_msg = "Failed to save planet feeds. Status: " + xhr.status + " " + txtStatus;
                 console.log(fail_msg);
                 set_message(fail_msg);
             }
