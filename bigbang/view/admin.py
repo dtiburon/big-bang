@@ -20,8 +20,8 @@ def thanks():
     return render_template('thanks')
 
 @app.route("/new")
-def new():
-    return render_template('newplanet')
+def new(msg=""):
+    return render_template('newplanet', msg=msg)
 
 @app.route("/error")
 def error():
@@ -43,11 +43,19 @@ def directory():
 
 @app.route("/planet/new", methods=["POST"])
 def newplanet():
-    slug = request.form['slug']
-    print slug
     planet_name = request.form['name'] # todo: pass planet_name value to planet admin page
-
-    return redirect(os.path.join('planet', slug, 'admin?new=1'))
+    slug = request.form['slug']
+    print "New planet slug:", slug
+    # check to see if the slug is already in use
+    planet = Planet.query.filter_by(slug=slug).first()
+    print "Matching planet object:", planet
+    if planet:
+        print "planet already exists"
+        msg = "Sorry, there is already a planet with the slug '%s', please use another slug." % slug
+        return redirect('/new')
+    else:
+        print "no planet has claimed this slug yet - creating new planet"
+        return redirect(os.path.join('planet', slug, 'admin?new=1'))
 
 @app.route("/planet/<slug>")
 def planet(slug):

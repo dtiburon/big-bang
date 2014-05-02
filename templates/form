@@ -2,6 +2,9 @@
   <form id="new-planet" method="post" action="/planet/new" class="form-horizontal"> 
     <fieldset>
       <legend>Get Started</legend>
+      <!-- Alert message; hidden by default -->
+      <div class="alert" id="status-message" style="display: none"></div>
+
       <label>Planet name</label>
       <input type="text" id="name" name="name">
       <span class="help-block">This will appear at the top of your planet page. You can change this later.</span>
@@ -18,35 +21,70 @@
 <script type="text/javascript" src="/static/js/jquery.validate.1.12.1.min.js"></script>
 <script type="text/javascript">
 
-$(document).ready(function(){
-
-  // validate form fields
-  $('#new-planet').validate({
-    rules: {
+var msg = ""
+var rules = {
       slug : {
+        pattern: '^[a-z0-9]+$',
         required: true,
         minlength: 3,
-        maxlength: 30,
-        pattern: '[a-z0-9]+'
+        maxlength: 30
+      },
+      name : {
+        required: true,
+        minlength: 4,
+        maxlength: 40
       }
-      // todo: add 'name' field rules once name input is passed through to admin form.
-    },
-    messages: {
-      slug : "Please enter a valid slug." 
     }
+
+var messages = {
+      slug : {
+        pattern: "This slug has invalid characters. Slugs can only consist of letters and numbers.",
+        required: "Please enter a valid slug.",
+        minlength: "Slugs must be 3 or more characters.",
+        maxlength: "Slugs must be 30 characters or less. Keep in mind that this will become part of the planet's URL; shorter slugs help keep the URL short as well."
+      },
+      name : "Please enter a valid planet name. Names can have 4-40 characters."
+    }
+
+$(document).ready(function(){
+  console.log("o hai!");
+  // validate form fields
+  $('#new-planet').validate({ 
+    rules: rules, 
+    messages: messages 
   });
+  // display error message if there is one 
+  console.log("Msg length: " + msg.length)
+  if (msg.length > 0){
+    set_message(msg);
+  }
+  else {
+    console.log("No error message to display");
+  };
 
 }); // end ready function
 
-  // additional validator method for regex pattern
-  $.validator.addMethod("pattern", function(value, element, param) {
-    if (this.optional(element)) {
-      return true;
-    }
-    if (typeof param === "string") {
-      param = new RegExp(param);
-    }
-    return param.test(value);
-  }, "This slug has invalid characters. Slugs can only consist of letters and numbers.");
+// additional validator method for slug regex pattern
+$.validator.addMethod("pattern", function(value, element, param) {
+  if (this.optional(element)) {
+    console.log("this.optional")
+    return true;
+  }
+  if (typeof param === "string") {
+    param = new RegExp(param);
+    console.log("RegExp test")
+  }
+  return param.test(value);
+  });
+
+function set_message(txt){
+  $("#status-message").text(txt);
+  $("#status-message").show();
+}
+
+function clear_message(){
+  $("#status-message").text("");
+  $("#status-message").hide();
+}
 
 </script>
