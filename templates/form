@@ -1,5 +1,5 @@
 <div class="box"><!-- box to frame Planet creation form -->
-  <form method="post" action="/planet/new" class="form-horizontal"> 
+  <form id="new-planet" method="post" action="/planet/new" class="form-horizontal"> 
     <fieldset>
       <legend>Get Started</legend>
       <label>Planet name</label>
@@ -7,10 +7,46 @@
       <span class="help-block">This will appear at the top of your planet page. You can change this later.</span>
       <label>Planet slug</label>
       <input type="text" id="slug" name="slug">
-      <span class="help-block">Your planet URL will be http://bigbang.org/slug.
+      <span class="help-block">Your planet URL will be http://bigbang.org/planet/slug.
       The slug can only consist of letters and numbers. This can never be changed.</span>
     </fieldset>
     <button type="submit" class="btn btn-success">Create Planet</button>
   </form>
 </div><!-- / .box for Planet creation form -->
 
+<script type="text/javascript" src="/static/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.validate.1.12.1.min.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+  // validate form fields
+  $('#new-planet').validate({
+    rules: {
+      slug : {
+        required: true,
+        minlength: 3,
+        maxlength: 30,
+        pattern: '[a-z0-9]+'
+      }
+      // todo: add 'name' field rules once name input is passed through to admin form.
+    },
+    messages: {
+      slug : "Please enter a valid slug." 
+    }
+  });
+
+}); // end ready function
+
+  // additional validator method for regex pattern
+  $.validator.addMethod("pattern", function(value, element, param) {
+    if (this.optional(element)) {
+      return true;
+    }
+    if (typeof param === "string") {
+      param = new RegExp(param);
+    }
+    return param.test(value);
+  }, "This slug has invalid characters. Slugs can only consist of letters and numbers.");
+
+</script>
