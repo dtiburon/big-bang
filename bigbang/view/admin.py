@@ -2,7 +2,7 @@
 import os
 from flask import Flask, render_template, request, redirect
 import json
-from werkzeug.exceptions import ServiceUnavailable, BadRequest, InternalServerError, NotFound
+from werkzeug.exceptions import ServiceUnavailable, BadRequest, InternalServerError, NotFound, Forbidden
 from sqlalchemy.exc import IntegrityError
 from bigbang.model.planet import Planet
 from bigbang.model.feed import Feed
@@ -41,21 +41,32 @@ def directory():
         planets.append(add_planet)
     return render_template('directory', planets=planets)
 
-@app.route("/planet/new", methods=["POST"])
+@app.route("/ws/planet/new", methods=["POST"])
 def newplanet():
-    planet_name = request.form['name'] # todo: pass planet_name value to planet admin page
-    slug = request.form['slug']
+    data = request.json
+    planet_name = data['planet_name']
+    slug = data['slug']
     print "New planet slug:", slug
+    print "New planet name:", planet_name
     # check to see if the slug is already in use
     planet = Planet.query.filter_by(slug=slug).first()
     print "Matching planet object:", planet
     if planet:
         print "planet already exists"
-        msg = "Sorry, there is already a planet with the slug '%s', please use another slug." % slug
-        return redirect('/new')
+        raise Forbidden #403
     else:
         print "no planet has claimed this slug yet - creating new planet"
-        return redirect(os.path.join('planet', slug, 'admin?new=1'))
+        planet = Planet()
+        db.session.add(planet)
+        planet.slug = data['slug']
+        planet.name = data['planet_name']
+        try:
+            db.session.commit()
+        except IntegrityError as inst:
+            print str(inst)
+            raise BadRequest(description="Planet data does not meet database constraints: %s" % str(inst))
+    # Flask requires that this function return a json dict but it's not used.
+    return "{}"
 
 @app.route("/planet/<slug>")
 def planet(slug):
@@ -222,7 +233,7 @@ def ws_planet_admin(slug):
             print str(inst)
             raise BadRequest(description="Planet data does not meet database constraints: %s" % str(inst))
 
-        # Flask requires that this function return jquery but it's not used.
+        # Flask requires that this function return json but it's not used.
         return json.dumps({})
 
 
