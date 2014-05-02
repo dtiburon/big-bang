@@ -83,7 +83,6 @@ body {
 }
 
 .entrytitle a {
-	color:;
 }
 
 .author-image {
@@ -148,7 +147,7 @@ body {
 
 .image-holder h1 {
 	text-align: center;
-	vertical-align: center;
+	vertical-align: middle;
 	color: #FFF;
 	font-family: 'Times New Roman';
 }
