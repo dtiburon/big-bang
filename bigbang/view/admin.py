@@ -43,7 +43,7 @@ def directory():
 
 @app.route("/ws/planet/new", methods=["POST"])
 def newplanet():
-    data = request.json
+    data = request.form
     planet_name = data['planet_name']
     slug = data['slug']
     print "New planet slug:", slug
